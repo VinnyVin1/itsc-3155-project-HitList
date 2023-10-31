@@ -1,0 +1,57 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <header>
+        <nav class="navbar">
+            <a id="hitlist-brand" href="/">HitList</a>
+            <div class="navlinks">
+                <ul class="navbar-list">
+                    <li class="nav-item">
+                        <a class="home" href="{{ url_for('index_page')}}">Home</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sign-in" href="/">Sign-In</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="sign-up" href="{{ url_for('signup_page')}}">Sign-Up</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="contact" href="/">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+    </header>
+
+    <main class="signup-main">
+        <!-- <div class="signup-container">
+            <img src="{{ url_for('static', filename='images/microphone.jpeg') }}" alt="headphones">
+            <div class="signup-form-container">
+                <form class="signup-form">
+                    <div class="form-group">
+                        <label for="fname">First Name</label>
+                        <input type="text" class="form-control" id="fname">
+                    </div>.
+                    <div class="form-group">
+                        <label for="lname">Last Name</label>
+                        <input type="text" class="form-control" id="lname">
+                    </div>
+                    <div class="form-group">
+                        <label for="username">User Name</label>
+                        <input type="text" class="form-control" id="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password">
+                    </div>
+                    <button type="submit" class="signup-btn">Sign-Up</button>
+                </form>
+            </div>
+        </div> -->
+    </main>
+{% endblock %}
