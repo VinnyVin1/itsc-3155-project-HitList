@@ -21,11 +21,17 @@ body {
 a {
     text-decoration: none;
     font-size: 20px;
+    color: var(--clr-gray);
+}
+
+ul, li {
+    list-style: none;
 }
 
 /* Header */
-header {
+.navbar {
     background-color: var(--clr-red);
+    padding: 0;
 }
 
 #hitlist-brand {
@@ -33,21 +39,29 @@ header {
     margin-left: 20px;
 }
 
-.navbar-nav {
+.navbar-list {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     height: 60px;
     gap: 20px;
-    margin-right: 20px;
+    margin: 0 20px 0 0;
     align-items: center;
 }
 
-.navbar-nav a {
+.navbar-list a {
     color: var(--clr-gray);
 }
 
-.navbar-nav a:active {
+.navbar-list .active a {
     color: var(--clr-neutral-A);
+}
+
+/* Main */
+.signup-main {
+    background: purple;
+    height: 90vh;
+    width: 100%;
 }
 
 /* Footer */
@@ -59,10 +73,6 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
-    bottom: 0;
     width: 100%;
 }
-
-
 
