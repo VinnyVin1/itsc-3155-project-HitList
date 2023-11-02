@@ -23,3 +23,8 @@ def sign_in_page():
 def sign_in():
     # get data here when more functionality is established 
     return redirect('index.html')
+
+@app.get('/discussion')
+def discussion_page():
+    return render_template('discussion.html')
+
