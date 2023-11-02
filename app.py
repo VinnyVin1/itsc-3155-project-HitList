@@ -23,3 +23,6 @@ def sign_in():
 def discussion_page():
     return render_template('discussion.html')
 
+@app.route('/contact_us')
+def contact():
+    return render_template('contact.html')
