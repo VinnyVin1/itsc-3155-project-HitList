@@ -5,18 +5,15 @@
         <nav class="navbar">
             <a id="hitlist-brand" href="/">HitList</a>
             <div class="navlinks">
-                <ul class="navbar-nav">
+                <ul class="navbar-list">
                     <li class="nav-item active">
-                        <a class="home" href="/">Home</span></a>
+                        <a class="home" href="{{ url_for('index_page')}}">Home</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="sign-in" href="/">Sign-In</a>
+                        <a class="sign-in" href="/sign_in_page">Sign-In</a>
                     </li>
                     <li class="nav-item">
-                        <a class="sign-up" href="/">Sign-Up</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="forum" href="/">Forum</a>
+                        <a class="sign-up" href="{{ url_for('signup_page')}}">Sign-Up</a>
                     </li>
                     <li class="nav-item">
                         <a class="contact" href="/">Contact</a>
@@ -27,7 +24,18 @@
         
     </header>
 
-    <main>
-        
+    <main class="index-main">
+        <div class="index-main-container">
+            <div class="index-main-text">
+                <h1>HitList</h1>
+                <h2><span class="orange-text">Discover</span> your taste</h2>
+                <h2>in <span class="orange-text">music</span>.</h2>
+            </div>
+            <div class="index-main-btns">
+                <a href="/">Sign-In</a>
+                <a href="{{ url_for('signup_page') }}">Sign-Up</a>
+            </div>
+            <img src="{{ url_for('static', filename='images/headphones.jpeg') }}" alt="headphones">
+        </div>
     </main>
 {% endblock %}
