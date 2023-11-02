@@ -6,9 +6,10 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route('/contact_us')
+@app.route('/contact_page')
 def contact():
     return render_template('contact.html')
+
 @app.get('/sign_in_page')
 def sign_in_page():
     return render_template('sign_in_page.html')
