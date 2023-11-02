@@ -27,3 +27,4 @@ def sign_in():
 @app.get('/discussion')
 def discussion_page():
     return render_template('discussion.html')
+
