@@ -1,52 +1,41 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<head>
-    <style>
-        form {
-            width: 50vw;
-            padding-left: 15px;
-            padding-top: 10px;
-            grid-column: 2;
-        }
-
-        img {
-            width: 50vw; 
-            height: 90vh;
-            grid-column: 1;
-        }
-
-        main {
-            display: grid;
-            grid-template-columns: 2fr 2fr;
-        }
-    </style>
-</head>
 <body>
     <header>
         <nav class="navbar">
             <a id="hitlist-brand" href="/">HitList</a>
             <div class="navlinks">
-                <ul class="navbar-nav">
+                <ul class="navbar-list">
+                    <li class="nav-item">
+                        <a class="home" href="{{ url_for('index_page') }}">Home</span></a>
+                    </li>
                     <li class="nav-item active">
-                        <a class="home" href="/">Home</span></a>
+                        <a class="sign-in" href="{{ url_for('signin_page') }}">Sign-In</a>
                     </li>
                     <li class="nav-item">
-                        <a class="sign-up" href="/">Sign up</a>
+                        <a class="sign-up" href="{{ url_for('signup_page') }}">Sign-Up</a>
                     </li>
                     <li class="nav-item">
-                        <a class="forum" href="/">Forum</a>
+                        <a class="discussion_page" href="{{ url_for('discussion_page') }}">Discussion</a>
                     </li>
                     <li class="nav-item">
-                        <a class="contact" href="/">Contact</a>
+                        <a class="contact" href="{{ url_for('contact_page') }}">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="contact" href="{{ url_for('playlist_page') }}">Playlists</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="contact" href="{{ url_for('account_settings_page') }}">Account</a>
                     </li>
                 </ul>
             </div>
         </nav>
     </header>
-    <main>
+
+    <main class="signin-main">
         <img src="../static/images/microphone.jpeg" alt="microphone">
-        <form action="/sign_in_page" method="post">
+        <form action="/sign_in_page" method="post" class="signin-form">
             <h1>Sign in</h1>
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
