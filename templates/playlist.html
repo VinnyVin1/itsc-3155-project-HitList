@@ -1,0 +1,93 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<body>
+    <header>
+        <nav class="navbar">
+            <a id="hitlist-brand" href="/">HitList</a>
+            <div class="navlinks">
+                <ul class="navbar-list">
+                    <li class="nav-item active">
+                        <a class="home" href="{{ url_for('index_page') }}">Home</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sign-in" href="{{ url_for('signin_page') }}">Sign in</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sign-up" href="{{ url_for('signup_page') }}">Sign up</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="discussion_page" href="{{ url_for('discussion_page') }}">Discussion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="contact" href="{{ url_for('contact_page') }}">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="contact" href="{{ url_for('account_settings_page') }}">Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="profile" href="{{ url_for('profile_page') }}">Profile</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main class="playlist-main">
+        <div class="playlist-container">
+            <div class="playlist-table">
+                <h2>Playlist Name</h2>
+                <table class="table">
+                    <thead>
+                        <th>#</th>
+                        <th>Song</th>
+                        <th>Artist</th>
+                        <th>Genre</th>
+                    </thead>
+                    <tbody>
+                        <!-- dummy information for now-->
+                        <tr>
+                            <td>1</td>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="playlist">
+                <div class="user-playlists">
+                    <h2>Playlists</h2>
+                    <ul>
+                        <li>
+                            <input class="form-check-input" type="radio" name="playlist" id="playlist-1">
+                            <label class="form-check-label" for="playlist-1">Playlist 1</label>
+                        </li>
+                        <li>
+                            <input class="form-check-input" type="radio" name="playlist" id="playlist-2">
+                            <label class="form-check-label" for="playlist-1">Playlist 2</label>
+                        </li>
+                        <li>
+                            <input class="form-check-input" type="radio" name="playlist" id="playlist-3">
+                            <label class="form-check-label" for="playlist-1">Playlist 3</label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="playlist-info">
+                    <h2>Playlist Details</h2>
+                    <ul>
+                        <li>
+                            <p>Number of songs: </p>
+                        </li>
+                        <li>
+                            <p>Date created: </p>
+                        </li>
+                        <li>
+                            <p>Number of genres: </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+{% endblock %}
