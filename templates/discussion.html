@@ -38,14 +38,14 @@
             #Profile Image here
         </div>
         <div class = "discussion-container">
-            <form class = "new-post">
+            <form method = "POST" action = "createdPost" class = "new-post">
                 <div class="form-group">
                     <label for="title">Title</label>
-                    <input type="text" class="form-control" id="title">
+                    <input type="text" class="form-control" id="title" name="title">
                 </div>
                 <div class="form-group">
                     <label for="content">Content</label>
-                    <textarea class="form-control" id="content" rows="3"></textarea>
+                    <textarea class="form-control" id="content" name="content" rows="3"></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Post</button>
             </form>
