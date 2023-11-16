@@ -36,6 +36,9 @@ def account_settings_page():
 def account_contact_page():
     return render_template('account_contact.html')
 
+@app.route('/profile_page')
+def profile_page():
+    return render_template('profile.html')
 
 # Functions for functionality
 

@@ -249,3 +249,46 @@ button[type="submit"] {
     border: 2px solid var(--clr-gray);
     border-radius: 10px;
 }
+
+/* Profile Main */ 
+.grid-container-profile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;    
+    justify-content: center;
+    gap: 10rem; 
+}
+
+.profile-container, .user-info-container {
+    padding: 1rem;
+    text-align: left;
+}
+
+.profile-container > img {
+    width: 20vw;
+    height: 45vh;
+}
+
+.user-post {
+    border: 2px solid black;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 4px;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+    width: 40vw;
+}
+
+
+/**** Playlist page CSS ****/
+
+.playlist-container {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem;
+}
+
+.playlist-table {
+    width: 60vw;
+    height: 40vh;
+}
+
