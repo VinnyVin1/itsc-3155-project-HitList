@@ -28,6 +28,10 @@ def contact_page():
 def profile_page():
     return render_template('profile.html')
 
+@app.route('/playlist_page')
+def playlist_page():
+    return render_template('playlist.html')
+
 @app.route('/account_settings_page')
 def account_settings_page():
     return render_template('account_settings.html')

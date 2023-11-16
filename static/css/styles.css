@@ -166,12 +166,16 @@ footer {
     height: 90vh;
     width: 100%;
     background-color: var(--clr-neutral-A);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .signup-main-container {
     min-height: 90vh;
-    width: 100%;
+    width: 50%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 } 
@@ -255,7 +259,50 @@ button[type="submit"] {
 }
 
 
-/**** Acount Settings ****/
+/**** Profile Main ****/ 
+.grid-container-profile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;    
+    justify-content: center;
+    gap: 10rem; 
+}
+
+.profile-container, .user-info-container {
+    padding: 1rem;
+    text-align: left;
+}
+
+.profile-container > img {
+    width: 20vw;
+    height: 45vh;
+}
+
+.user-post {
+    border: 2px solid black;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 4px;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+    width: 40vw;
+}
+
+
+/**** Playlist Main ****/
+
+.playlist-container {
+    display: flex;
+    flex-direction: row;
+    padding: 1rem;
+}
+
+.playlist-table {
+    width: 60vw;
+    height: 40vh;
+}
+
+
+/**** Acount Settings Main ****/
 .prof-settings-main {
     background-color: var(--clr-neutral-A);
     height: 90vh;
@@ -330,8 +377,7 @@ button[type="submit"] {
 }
 
 
-
-/**** Account Contact ****/
+/**** Account Contact Main ****/
 .prof-contact-main {
     background-color: var(--clr-neutral-A);
     height: 90vh;

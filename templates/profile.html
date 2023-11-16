@@ -1,0 +1,107 @@
+{% extends 'layout.html' %}
+
+{% block body %} 
+<body>
+    <header>
+        <nav class="navbar">
+            <a id="hitlist-brand" href="/">HitList</a>
+            <div class="navlinks">
+                <ul class="navbar-list">
+                    <li class="nav-item">
+                        <a class="home" href="{{ url_for('index_page') }}">Home</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="signin_page" href="{{ url_for('signin_page') }}">Sign-In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sign-up" href="{{ url_for('signup_page') }}">Sign-Up</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="discussion_page" href="{{ url_for('discussion_page') }}">Discussion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="contact_page" href="{{ url_for('contact_page') }}">Contact</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="profile_page" href="{{ url_for('profile_page') }}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="account_settings_page" href="{{ url_for('account_settings_page') }}">Settings/Support</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- User page will be different for each user, change this when we have DB and more functionality -->
+    <main class="profile-page">
+        <div class="grid-container-profile">
+            <div class="profile-container">
+                <img src="../static/images/default_profile_picture.jpg" alt="profile picture">
+                <div class="user-info-container">
+                    <p>Username</p>
+                    <p>User unique identifier</p>
+    
+                    <!--This href should link to a users uploaded playlists later on, but for now i just linked it to the playlist html page-->
+                    <p><a href="{{ url_for('playlist_page') }}">Playlists</a></p>
+    
+                    <!-- I think the account settings page might need to be unique to each user -->
+                    <p><a href="{{ url_for('account_settings_page') }}">Settings</a></p>
+                </div>
+            </div>
+            <div class="user-post-container">
+                <!-- dummy posts for now -->
+                <div class="user-post">
+                    <article>
+                        Post 1
+                    </article>
+                </div>
+                <div class="user-post">
+                    <article>
+                        Post 2
+                    </article>
+                </div>
+                <div class="user-post">
+                    <article>
+                        Post 3
+                    </article>
+                </div>
+                <div class="user-post">
+                    <article>
+                        Post 4
+                    </article>
+                </div>
+                <div class="user-post">
+                    <article>
+                        Post 5
+                    </article>
+                </div>
+                <div class="user-post">
+                    <article>
+                        Post 6
+                    </article>
+                </div>
+                <div class="user-post">
+                    <article>
+                        Post 7
+                    </article>
+                </div>
+                <div class="user-post">
+                    <article>
+                        Post 8
+                    </article>
+                </div>
+                <div class="user-post">
+                    <article>
+                        Post 9
+                    </article>
+                </div>
+                <div class="user-post">
+                    <article>
+                        Post 10
+                    </article>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+{% endblock %}
