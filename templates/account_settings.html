@@ -10,7 +10,7 @@
                         <a class="home" href="{{ url_for('index_page') }}">Home</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="sign-in" href="{{ url_for('signin_page') }}">Sign-In</a>
+                        <a class="signin_page" href="{{ url_for('signin_page') }}">Sign-In</a>
                     </li>
                     <li class="nav-item">
                         <a class="sign-up" href="{{ url_for('signup_page') }}">Sign-Up</a>
@@ -19,17 +19,53 @@
                         <a class="discussion_page" href="{{ url_for('discussion_page') }}">Discussion</a>
                     </li>
                     <li class="nav-item">
-                        <a class="contact" href="{{ url_for('contact_page') }}">Contact</a>
+                        <a class="contact_page" href="{{ url_for('contact_page') }}">Contact</a>
                     </li>
                     <li class="nav-item">
-                        <a class="contact" href="{{ url_for('playlist_page') }}">Playlists</a>
+                        <a class="profile_page" href="{{ url_for('profile_page') }}">Profile</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="contact" href="{{ url_for('account_settings_page') }}">Account</a>
+                        <a class="account_settings_page" href="{{ url_for('account_settings_page') }}">Settings/Support</a>
                     </li>
                 </ul>
             </div>
         </nav>
     </header>
+
+    <main class="prof-settings-main">
+        <div class="prof-settings-links-container">
+            <h1>Profile Name</h1>
+            <img src="../static/images/profile.png" alt="Empty Profile">
+            <a href="{{ url_for('account_settings_page') }}" class="selected">Settings</a>
+            <a href="{{ url_for('account_contact_page') }}">Contact</a>
+        </div>
+        <div>
+            <form method="post" action="get_profile_info">
+                <div class="prof-settings-form-group">
+                    <label for="first-name">First Name</label>
+                    <input type="text" class="prof-settings-form-control" id="first-name" required>
+                </div>
+                <div class="prof-settings-form-group">
+                    <label for="last-name">Last Name</label>
+                    <input type="text" class="prof-settings-form-control" id="last-name" required>
+                </div>
+                <div class="prof-settings-form-group">
+                    <label for="usermame">Username</label>
+                    <input type="text" class="prof-settings-form-control" id="username" required>
+                </div>
+                <button type="submit" class="setitngs-btn">Change Username</button>
+                <div class="prof-settings-form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="prof-settings-form-control" id="email" required>
+                </div>
+                <button type="submit" class="setting-btn">Change Email</button>
+                <!-- <div class="prof-settings-form-group">
+                    <label for="paswword">Password</label>
+                    <input type="password" class="prof-settings-form-control" id="password" required>
+                </div>
+                <button type="submit" class="prof-setting-btn">Change Password</button> -->
+            </form>
+        </div>
+    </main>
 {% endblock %}
 

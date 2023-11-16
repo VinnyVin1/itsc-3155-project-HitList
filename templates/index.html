@@ -10,7 +10,7 @@
                         <a class="home" href="{{ url_for('index_page') }}">Home</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="sign-in" href="{{ url_for('signin_page') }}">Sign-In</a>
+                        <a class="signin_page" href="{{ url_for('signin_page') }}">Sign-In</a>
                     </li>
                     <li class="nav-item">
                         <a class="sign-up" href="{{ url_for('signup_page') }}">Sign-Up</a>
@@ -19,13 +19,13 @@
                         <a class="discussion_page" href="{{ url_for('discussion_page') }}">Discussion</a>
                     </li>
                     <li class="nav-item">
-                        <a class="contact" href="{{ url_for('contact_page') }}">Contact</a>
+                        <a class="contact_page" href="{{ url_for('contact_page') }}">Contact</a>
                     </li>
                     <li class="nav-item">
-                        <a class="contact" href="{{ url_for('playlist_page') }}">Playlists</a>
+                        <a class="profile_page" href="{{ url_for('profile_page') }}">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="contact" href="{{ url_for('account_settings_page') }}">Account</a>
+                        <a class="account_settings_page" href="{{ url_for('account_settings_page') }}">Settings/Support</a>
                     </li>
                 </ul>
             </div>
@@ -33,17 +33,15 @@
     </header>
 
     <main class="index-main">
-        <div class="index-main-container">
-            <div class="index-main-text">
-                <h1>HitList</h1>
-                <h2><span class="orange-text">Discover</span> your taste</h2>
-                <h2>in <span class="orange-text">music</span>.</h2>
-            </div>
-            <div class="index-main-btns">
-                <a href="{{ url_for('signin_page') }}">Sign-In</a>
-                <a href="{{ url_for('signup_page') }}">Sign-Up</a>
-            </div>
-            <img src="{{ url_for('static', filename='images/headphones.jpeg') }}" alt="headphones">
+        <div class="index-main-text">
+            <h1>HitList</h1>
+            <h2><span class="orange-text">Discover</span> your taste</h2>
+            <h2>in <span class="orange-text">music</span>.</h2>
         </div>
+        <div class="index-main-btns">
+            <a href="{{ url_for('signin_page') }}">Sign-In</a>
+            <a href="{{ url_for('signup_page') }}">Sign-Up</a>
+        </div>
+        <img src="{{ url_for('static', filename='images/headphones.jpeg') }}" alt="headphones">
     </main>
 {% endblock %}

@@ -25,6 +25,10 @@ a {
     color: var(--clr-gray);
 }
 
+a:hover {
+    color: var(--clr-gray);
+}
+
 ul, li {
     list-style: none;
 }
@@ -33,6 +37,7 @@ ul, li {
 .navbar {
     background-color: var(--clr-red);
     padding: 0;
+    position: relative;
 }
 
 #hitlist-brand {
@@ -72,11 +77,13 @@ footer {
     justify-content: center;
     align-items: center;
     width: 100%;
+    position: absolute;
+    bottom: 0;
 }
 
 
 /**** Index Main ****/
-.index-main-container {
+.index-main {
     background-color: var(--clr-neutral-A);
     min-height: 90vh;
     width: 100%;
@@ -85,11 +92,12 @@ footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    overflow-x: hidden;
 }
 
 .index-main img {
     width: 75vh;
-    height: 90vh;
+    height: 92vh;
 }
 
 .index-main-text {
@@ -245,3 +253,170 @@ button[type="submit"] {
     border: 2px solid var(--clr-gray);
     border-radius: 10px;
 }
+
+
+/**** Acount Settings ****/
+.prof-settings-main {
+    background-color: var(--clr-neutral-A);
+    height: 90vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 150px;
+    color: var(--clr-red);
+}
+
+.prof-settings-links-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.prof-settings-links-container img {
+    width: 400px;
+    height: 400px;
+    margin-bottom: 5px;
+    border: 5px solid var(--clr-red);
+    border-radius: 10px;
+}
+
+.prof-settings-links-container .selected {
+    color: var(--clr-orange);
+}
+
+.prof-settings-links-container h3, .prof-settings-links-container a {
+    font-size: 30px;
+    color: var(--clr-red);
+}
+
+.prof-settings-main form {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    
+}
+
+.prof-settings-form-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+}
+
+.prof-settings-form-group label {
+    width: 200px;
+    font-size: 30px;
+    padding-bottom: 15px;
+    color: var(--clr-red);
+}
+
+.prof-settings-form-group input {
+    width: 500px;
+    height: 50px;
+    border-radius: 10px;
+    border: 2px solid var(--clr-orange);
+    font-size: 30px;
+}
+
+.prof-settings-main button {
+    width: 250px;
+    border-radius: 10px;
+    margin-left: 325px;
+    font-size: 20px;
+}
+
+
+
+/**** Account Contact ****/
+.prof-contact-main {
+    background-color: var(--clr-neutral-A);
+    height: 90vh;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 150px;
+    color: var(--clr-red);
+}
+
+.prof-contact-links-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.prof-contact-links-container img {
+    width: 400px;
+    height: 400px;
+    margin-bottom: 5px;
+    border: 5px solid var(--clr-red);
+    border-radius: 10px;
+}
+
+.prof-contact-links-container .selected {
+    color: var(--clr-orange);
+}
+
+.prof-contact-links-container h3, .prof-contact-links-container a {
+    font-size: 30px;
+    color: var(--clr-red);
+}
+
+.prof-contact-main form {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    
+}
+
+.prof-contact-form-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+}
+
+.prof-contact-form-group label {
+    width: 200px;
+    font-size: 30px;
+    padding-bottom: 15px;
+    color: var(--clr-red);
+}
+
+.prof-contact-form-group input {
+    width: 500px;
+    height: 50px;
+    border-radius: 10px;
+    border: 2px solid var(--clr-orange);
+    font-size: 30px;
+}
+
+.prof-contact-form-group:nth-child(4) {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.prof-contact-form-group:nth-child(4) textarea {
+    border: 2px solid var(--clr-orange);
+    border-radius: 10px;
+    font-size: 30px;
+}
+
+
+.prof-contact-main button {
+    width: 250px;
+    border-radius: 10px;
+    font-size: 20px;
+    align-self: center;
+}
+
+
+
