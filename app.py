@@ -24,6 +24,10 @@ def discussion_page():
 def contact_page():
     return render_template('contact.html')
 
+@app.route('/profile_page')
+def profile_page():
+    return render_template('profile.html')
+
 @app.route('/playlist_page')
 def playlist_page():
     return render_template('playlist.html')
@@ -36,9 +40,6 @@ def account_settings_page():
 def account_contact_page():
     return render_template('account_contact.html')
 
-@app.route('/profile_page')
-def profile_page():
-    return render_template('profile.html')
 
 # Functions for functionality
 
@@ -46,3 +47,13 @@ def profile_page():
 def sign_in():
     # get data here when more functionality is established 
     return redirect('index.html')
+
+@app.post('/profile_info')
+def profile_info():
+    # get data here when more functionality is established 
+    return redirect('account_settings.html')
+
+@app.post('/send_contact')
+def send_contact():
+    # get data here when more functionality is established 
+    return redirect('account_contact.html')
