@@ -33,6 +33,10 @@ ul, li {
     list-style: none;
 }
 
+.hidden {
+    display: none;
+}
+
 /**** Header ****/
 .navbar {
     background-color: var(--clr-red);
@@ -191,6 +195,147 @@ footer {
 
 
 /**** Discussion Main ****/
+.discussion-main {
+    background-color: var(--clr-neutral-A);
+    height: 90vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 100px;
+    color: var(--clr-red);
+    position: relative;
+}
+
+.discussion-main-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+}
+
+.discussion-main-profile #new-post {
+    font-size: 25px;
+    margin-top: 25px;
+}
+
+.discussion-post-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--clr-neutral-A);
+    background-color: var(--clr-orange);
+    border: 2px solid var(--clr-orange);
+    border-radius: 50px;
+    width: 75px;
+    height: 75px;
+    margin-top: 100px;
+    right: 100px;
+}
+
+.discussion-post-btn span {
+    font-size: 50px;
+}
+
+.discussion-links-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin: 100px 0 0 0;
+}
+
+.discussion-links-container img {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 5px;
+    border: 5px solid var(--clr-red);
+    border-radius: 10px;
+}
+
+.discussion-links-container button {
+    color: var(--clr-neutral-A);
+    background-color: var(--clr-orange);
+    border-radius: 50px;
+    width: 75px;
+    height: 75px;
+}
+
+.discussion-links-container h1, .discussion-links-container a {
+    font-size: 30px;
+    color: var(--clr-red);
+}
+
+.discussion-links-container .selected {
+    color: var(--clr-orange);
+}
+
+.discussion-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.discussion-card-container {
+    max-width: 100em;
+    height: auto;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 20px;
+    border: 2px solid var(--clr-red);
+    margin: 100px 0 0 100px;
+    padding: 30px;
+    border-radius: 30px;
+}
+
+.discussion-card-container-profile {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.discussion-card-container-profile div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.discussion-card-container-profile img {
+    width: 75px;
+    height: 75px;
+    border-radius: 50px;
+    border: 2px solid var(--clr-orange);
+}
+
+.discussion-card-container p {
+    padding: 0 10px;
+    font-size: 25px;
+}
+
+.discussion-card-container-btns {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.discussion-card-container-btns div {
+    display: flex;
+}
+
+.discussion-card-container-btns button {
+    color: var(--clr-neutral-A);
+    background-color: var(--clr-red);
+    border-radius: 50px;
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    padding-top: 5px;
+    margin: 0 15px;
+}
 
 
 /**** Contact Main ****/

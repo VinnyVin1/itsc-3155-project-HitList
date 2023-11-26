@@ -57,3 +57,9 @@ def profile_info():
 def send_contact():
     # get data here when more functionality is established 
     return redirect('account_contact.html')
+
+@app.route('/get_profile_name')
+def get_profile_name():
+    return redirect('discussion.html')
+
+

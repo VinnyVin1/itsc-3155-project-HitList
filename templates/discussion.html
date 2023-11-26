@@ -32,23 +32,36 @@
         </nav>
     </header>
 
-    <main class = "disucssion">
-        <div class = "profile_name">
-            <h3 class = "profile_name_text">Profile Name</h1>
-            #Profile Image here
+    <main class="discussion-main">
+        <div class="discussion-main-profile">
+            <a class="discussion-post-btn" href="{{ url_for('discussion_page') }}"><span class="material-symbols-outlined">add</span></a>
+            <h1 id="new-post">Create a new post!</h1>
+            <div class="discussion-links-container">
+                <h1>Profile Name</h1>
+                <img src="../static/images/profile.png" alt="Empty Profile">
+                <a href="{{ url_for('discussion_page') }}" class="selected">Newest</a>
+                <a href="{{ url_for('discussion_page') }}">Oldest</a>
+            </div>
         </div>
-        <div class = "discussion-container">
-            <form class = "new-post">
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input type="text" class="form-control" id="title">
+        <div class="discussion-card">
+            <div class="discussion-card-container">
+                <div class="discussion-card-container-profile">
+                    <div>
+                        <img src="../static/images/profile.png" alt="Profile Name">
+                        <h2>Profile Name</h2>
+                    </div>
+                    <h2>Date</h2>
                 </div>
-                <div class="form-group">
-                    <label for="content">Content</label>
-                    <textarea class="form-control" id="content" rows="3"></textarea>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, alias porro doloribus ad, maxime ducimus debitis corrupti eligendi ullam quidem libero est, perspiciatis ipsam laudantium.</p>
+                <div class="discussion-card-container-btns">
+                    <button>Comment</button>
+                    <div>
+                        <button><span class="material-symbols-outlined">thumb_up</span></button>
+                        <button><span class="material-symbols-outlined">thumb_down</span></button>
+                        <button><span class="material-symbols-outlined">share</span></button>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Post</button>
-            </form>
+            </div>
         </div>
     </main>
 {% endblock %}
