@@ -1,15 +1,16 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+<body>
     <header>
         <nav class="navbar">
             <a id="hitlist-brand" href="/">HitList</a>
             <div class="navlinks">
                 <ul class="navbar-list">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="home" href="{{ url_for('index_page') }}">Home</span></a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="signin_page" href="{{ url_for('signin_page') }}">Sign-In</a>
                     </li>
                     <li class="nav-item">
@@ -19,7 +20,7 @@
                         <a class="discussion_page" href="{{ url_for('discussion_page') }}">Discussion</a>
                     </li>
                     <li class="nav-item">
-                        <a class="contact" href="/contact_us">Contact</a>
+                        <a class="contact_page" href="{{ url_for('contact_page') }}">Contact</a>
                     </li>
                     <li class="nav-item">
                         <a class="profile_page" href="{{ url_for('profile_page') }}">Profile</a>
@@ -32,16 +33,20 @@
         </nav>
     </header>
 
-    <main class="index-main">
-        <div class="index-main-text">
-            <h1>HitList</h1>
-            <h2><span class="orange-text">Discover</span> your taste</h2>
-            <h2>in <span class="orange-text">music</span>.</h2>
-        </div>
-        <div class="index-main-btns">
-            <a href="{{ url_for('signin_page') }}">Sign-In</a>
-            <a href="{{ url_for('signup_page') }}">Sign-Up</a>
-        </div>
-        <img src="{{ url_for('static', filename='images/headphones.jpeg') }}" alt="headphones">
+    <main class="signin-main">
+        <img src="../static/images/microphone.jpeg" alt="microphone">
+        <form action="/signin_page" method="post" class="signin-form">
+            <h1>Sign in</h1>
+            <div class="mb-3">
+                <label for="username" class="form-label">Email</label>
+                <input type="username" class="form-control" id="usernmae" aria-describedby="emailHelp" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" aria-describedby="emailHelp" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Sign in</button>
+        </form>
     </main>
+</body>
 {% endblock %}

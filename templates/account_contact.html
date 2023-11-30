@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <header>
+        <nav class="navbar">
+            <a id="hitlist-brand" href="/">HitList</a>
+            <div class="navlinks">
+                <ul class="navbar-list">
+                    <li class="nav-item">
+                        <a class="home" href="{{ url_for('index_page') }}">Home</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="signin_page" href="{{ url_for('signin_page') }}">Sign-In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sign-up" href="{{ url_for('signup_page') }}">Sign-Up</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="discussion_page" href="{{ url_for('discussion_page') }}">Discussion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="contact_page" href="{{ url_for('contact_page') }}">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="profile_page" href="{{ url_for('profile_page') }}">Profile</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="account_settings_page" href="{{ url_for('account_settings_page') }}">Settings/Support</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="prof-contact-main">
+        <div class="prof-contact-links-container">
+            <h1>Profile Name</h1>
+            <img src="../static/images/profile.png" alt="Empty Profile">
+            <a href="{{ url_for('account_settings_page') }}">Settings</a>
+            <a href="{{ url_for('account_contact_page') }}" class="selected">Contact</a>
+        </div>
+        <div>
+            <form method="post" action="send_contact">
+                <div class="prof-contact-form-group">
+                    <label for="first-name">First Name</label>
+                    <input type="text" class="prof-contact-form-control" id="first-name" required>
+                </div>
+                <div class="prof-contact-form-group">
+                    <label for="last-name">Last Name</label>
+                    <input type="text" class="prof-contact-form-control" id="last-name" required>
+                </div>
+                <div class="prof-contact-form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="prof-contact-form-control" id="email" required>
+                </div>
+                <div class="prof-contact-form-group">
+                    <label for="textarea">Comments/Concerns</label>
+                    <textarea name="textarea" id="textarea" cols="30" rows="5"></textarea>
+                </div>
+                <button type="submit" class="prof-contact-btn">Submit</button>
+            </form>
+        </div>
+    </main>
+{% endblock %}
+

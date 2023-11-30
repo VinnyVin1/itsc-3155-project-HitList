@@ -1,48 +1,69 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<header>
-    <nav class="navbar">
-        <a id="hitlist-brand" href="/">HitList</a>
-        <div class="navlinks">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="home" href="{{ url_for('index_page')}}">Home</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="sign-in" href="/">Sign-In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="sign-up" href="{{ url_for('signup_page')}}">Sign-Up</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="forum" href="{{ url_for('discussion_page')}}">Forum</a>
-                </li>
-                <li class="nav-item">
-                    <a class="contact" href="/contact_us">Contact</a>
-                </li>
-            </ul>
+    <header>
+        <nav class="navbar">
+            <a id="hitlist-brand" href="/">HitList</a>
+            <div class="navlinks">
+                <ul class="navbar-list">
+                    <li class="nav-item">
+                        <a class="index_page" href="{{ url_for('index_page') }}">Home</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="signin_page" href="{{ url_for('signin_page') }}">Sign-In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sign-up" href="{{ url_for('signup_page') }}">Sign-Up</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="discussion_page" href="{{ url_for('discussion_page') }}">Discussion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="contact_page" href="{{ url_for('contact_page') }}">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="profile_page" href="{{ url_for('profile_page') }}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="account_settings_page" href="{{ url_for('account_settings_page') }}">Settings/Support</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="discussion-main">
+        <div class="discussion-main-profile">
+            <a class="discussion-post-btn" href="{{ url_for('discussion_page') }}"><span class="material-symbols-outlined">add</span></a>
+            <h1 id="new-post">Create a new post!</h1>
+            <div class="discussion-links-container">
+                <h1>Profile Name</h1>
+                <img src="../static/images/profile.png" alt="Empty Profile">
+                <a href="{{ url_for('discussion_page') }}" class="selected">Newest</a>
+                <a href="{{ url_for('discussion_page') }}">Oldest</a>
+            </div>
         </div>
-    </nav>
-</header>
-
-<main class = "disucssion">
-    <div class = "profile_name">
-        <h3 class = "profile_name_text">Profile Name</h1>
-        #Profile Image here
-    </div>
-    <div class = "discussion-container">
-        <form class = "new-post">
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" class="form-control" id="title">
+        <div class="discussion-card">
+            <div class="discussion-card-container">
+                <div class="discussion-card-container-profile">
+                    <div>
+                        <img src="../static/images/profile.png" alt="Profile Name">
+                        <h2>Profile Name</h2>
+                    </div>
+                    <h2>Date</h2>
+                </div>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, alias porro doloribus ad, maxime ducimus debitis corrupti eligendi ullam quidem libero est, perspiciatis ipsam laudantium.</p>
+                <div class="discussion-card-container-btns">
+                    <button>Comment</button>
+                    <div>
+                        <button><span class="material-symbols-outlined">thumb_up</span></button>
+                        <button><span class="material-symbols-outlined">thumb_down</span></button>
+                        <button><span class="material-symbols-outlined">share</span></button>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="content">Content</label>
-                <textarea class="form-control" id="content" rows="3"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Post</button>
-
+        </div>
+    </main>
 {% endblock %}
 
             
