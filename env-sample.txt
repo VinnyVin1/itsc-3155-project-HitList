@@ -1,0 +1,9 @@
+SPOTIPY_CLIENT_ID = 
+SPOTIPY_CLIENT_SECRET = 
+SPOTIPY_REDIRECT_URI = 
+
+db_user = 
+db_password = 
+db_host = 
+db_port =
+db_name =
