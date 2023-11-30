@@ -12,6 +12,8 @@ import datetime
 
 app = Flask(__name__)
 
+contact_storage = []
+
 load_dotenv()
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{os.getenv("db_user")}:{os.getenv("db_password")}@{os.getenv("db_host")}:{os.getenv("db_port")}/{os.getenv("db_name")}'
@@ -100,6 +102,31 @@ def account_settings_page():
 @app.route('/account_contact_page')
 def account_contact_page():
     return render_template('account_contact.html')
+  
+  def store_message_in_file(message):
+    with open('contact_messages.txt', 'a') as file:
+        file.write(message + '\n')
+
+@app.route('/contact_us', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'POST':
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['email']
+        message = request.form['message']
+
+        contact_storage.append({
+            'first_name': first_name,
+            'last_name': last_name,
+            'email': email,
+            'message': message
+        })
+
+        store_message_in_file(f"Name: {first_name} {last_name}, Email: {email}, Message: {message}")
+
+        return render_template('contact_success.html', first_name=first_name)
+
+    return render_template('contact.html')
 
 @app.get('/success_page')
 def success_page():
