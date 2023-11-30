@@ -31,7 +31,7 @@
         <img src="{{ url_for('static', filename='images/vinyl.jpeg') }}" alt="Vinyl">
     </div>
     <div class="contact_form">
-        <form method="POST" action="contact_us" class="contact_page_form">
+        <form method="POST" action="/contact_us" class="contact_page_form">
             <label for="first_name">First Name:</label>
             <br>
             <input type="text" name="first_name" id="first_name" required>
@@ -58,13 +58,4 @@
 </main>
     
     <link rel="stylesheet" href="{{ url_for('static', filename='css/contact.css') }}">
-    <script>
-        /* clears the form after submit button is pressed */
-        function clearForm() {
-            document.getElementById('first_name').value = '';
-            document.getElementById('last_name').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('message').value = '';
-        }
-    </script>
 {% endblock %}

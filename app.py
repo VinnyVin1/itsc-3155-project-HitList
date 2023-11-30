@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
 
+contact_storage = []
+
 @app.get('/')
 def index_page():
     return render_template('index.html')
@@ -23,6 +25,27 @@ def sign_in():
 def discussion_page():
     return render_template('discussion.html')
 
-@app.route('/contact_us')
+def store_message_in_file(message):
+    with open('contact_messages.txt', 'a') as file:
+        file.write(message + '\n')
+
+@app.route('/contact_us', methods=['GET', 'POST'])
 def contact():
+    if request.method == 'POST':
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['email']
+        message = request.form['message']
+
+        contact_storage.append({
+            'first_name': first_name,
+            'last_name': last_name,
+            'email': email,
+            'message': message
+        })
+
+        store_message_in_file(f"Name: {first_name} {last_name}, Email: {email}, Message: {message}")
+
+        return render_template('contact_success.html', first_name=first_name)
+
     return render_template('contact.html')
