@@ -15,7 +15,7 @@ app = Flask(__name__)
 load_dotenv()
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{os.getenv("db_user")}:{os.getenv("db_password")}@{os.getenv("db_host")}:{os.getenv("db_port")}/{os.getenv("db_name")}'
-app.secret_key = '1234'
+app.secret_key = getenv('FLASK_SECRET_KEY')
 db.init_app(app)
 
 bcrypt = Bcrypt(app)
