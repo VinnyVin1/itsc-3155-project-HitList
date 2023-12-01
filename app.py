@@ -103,7 +103,7 @@ def account_settings_page():
 def account_contact_page():
     return render_template('account_contact.html')
   
-  def store_message_in_file(message):
+def store_message_in_file(message):
     with open('contact_messages.txt', 'a') as file:
         file.write(message + '\n')
 
