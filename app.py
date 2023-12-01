@@ -1,15 +1,17 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-from .model import db, Posts
-
+from .model import Posts, db
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1234@localhost:5432/HitList_Posts'
+app.config['SQLALCHEMY_DATABASE_URI'] = \
+    'postgresql://postgres:1234@localhost:5432/hitlist_posts'
 
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+##app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+
+##db.create_all(app=app)
 
 # Functions to get pages
 @app.get('/')
@@ -30,9 +32,7 @@ def discussion_page():
 
 @app.post('/createdPost')
 def createdPost():
-    title_v = request.form.get('title')
-    content_v = request.form.get('content')
-    new_post = {title = title_v, 'content': content_v}
+    new_post =  Posts(id = db.Column(db.Integer, primary_key=True , autoincrement=True),title = request.form.get('title'),content = request.form.get('content'))
     db.session.add(new_post)
     db.session.commit()
     return render_template('discussion.html')
