@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, abort, session
+from flask import Flask, render_template, request, redirect, abort, session, url_for
 from flask_bcrypt import Bcrypt
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -9,6 +9,9 @@ import os
 import requests
 import base64
 import datetime
+import threading
+import uuid 
+import queue
 
 app = Flask(__name__)
 
@@ -31,6 +34,9 @@ spotify_auth = spotipy.SpotifyOAuth(
     scope = 'user-library-read user-read-currently-playing streaming'
 )
 
+Queue = queue.Queue()
+cache = dict()
+
 # Functions to get pages
 
 @app.get('/')
@@ -39,7 +45,7 @@ def index_page():
 
 @app.get('/signin_page')
 def signin_page():
-    print(session)
+
     if 'email' in session:
         return redirect('discussion_page')
     return render_template('signin.html')
@@ -60,12 +66,23 @@ def contact_page():
 def profile_page():
     return render_template('profile.html')
 
-@app.route('/playlist_page')
-def playlist_page():
+@app.route('/get_user_playlists')
+def get_user_playlists():
+    if 'access_token' not in session and 'refresh_token' not in session:
+        abort(403, 'Not authorized with Spotify, please connect to continue')
+
+    try:
+        if session['playlists'] == True:
+            return redirect(url_for('playlist', playlist_id = list(cache.keys())[0].split(', ')[1]))
+    except IndexError:
+        session['playlists'] = False
+        return redirect('get_user_playlists')
+    
     access_code = session.get('access_token')
 
-    if not access_code:
+    if 'email' not in session:
         return redirect('signin_page')
+
     else:
         header = {
             'Authorization': f'Bearer {access_code}'
@@ -80,20 +97,41 @@ def playlist_page():
 
             secondary_response = requests.get("https://api.spotify.com/v1/me/playlists", headers = secondary_header)
             secondary_data = secondary_response.json()
-            
-            # Information for each user playlist
-            secondary_playlist_data = get_playlist_information(secondary_data)
-            print(f'Playlist data is {secondary_playlist_data}')
-
+            unique_playlist_id = get_information(secondary_data)
+            session['playlists'] = True
+            return redirect(url_for('playlist', playlist_id = unique_playlist_id))
         else:
             data = get_response.json()
+            unique_playlist_id = get_information(data)
+            session['playlists'] = True
+            return redirect(url_for('playlist', playlist_id = unique_playlist_id))
 
-            # Information for each user playlist, a list of this format: 
-            # [playlist_name, [track_names], [track_artists], [track_durations], [track_durations]]
-            playlist_data = get_playlist_information(data)
-            print(f'Playlist data is {playlist_data}')
+@app.get('/playlist/<playlist_id>')
+def playlist(playlist_id):
 
-    return render_template('playlist.html')
+    logged_in = 'email' in list(session.keys())
+
+    id_list = []
+    for key in list(cache.keys()):
+        id_list.append(key.split(', ')[1])
+
+    if playlist_id not in id_list:
+        return redirect(url_for('discussion_page'))
+    else:
+        playlist_data = cache[f'{session["email"]}, {playlist_id}']
+        user_playlist = spotify.playlist(playlist_id = playlist_data[-1])
+        owner = user_playlist['owner']['display_name']
+        unique_artists = set(playlist_data[3])
+        names = []
+        for key in list(cache.keys()):
+            if key.split(', ')[0] == session['email']:
+                names.append((cache[key][0], key.split(', ')[1]))
+        return render_template('playlist.html', 
+                               playlist_data = playlist_data, 
+                               names = names, 
+                               owner = owner, 
+                               unique_artists = unique_artists,
+                               logged_in = logged_in)
 
 @app.route('/account_settings_page')
 def account_settings_page():
@@ -102,8 +140,8 @@ def account_settings_page():
 @app.route('/account_contact_page')
 def account_contact_page():
     return render_template('account_contact.html')
-  
-  def store_message_in_file(message):
+
+def store_message_in_file(message):
     with open('contact_messages.txt', 'a') as file:
         file.write(message + '\n')
 
@@ -189,6 +227,7 @@ def sign_up():
     db.session.commit()
     
     session['email'] = email
+    session['playlists'] = False 
 
     if spotify_allowed:
         return redirect(spotify_auth.get_authorize_url())
@@ -209,6 +248,7 @@ def sign_in():
         abort(401)
 
     session['email'] = email
+    session['playlists'] = False
 
     if user_exists.spotify_refresh_token != None:
         session['refresh_token'] = user_exists.spotify_refresh_token
@@ -243,40 +283,54 @@ def get_new_access_token():
     new_access_token = new_data.get('access_token')
     return new_access_token
 
-def get_playlist_information(data):
+def get_information(data):
     playlists = data['items']
     playlist_uris = [playlist['uri'] for playlist in playlists]
     playlist_names = [playlist['name'] for playlist in playlists]
     
     playlist_id = ''
-    playlist = ''
-    playlist_list = []
+    playlist_id_list = []
 
     for playlist_uri in playlist_uris:
         playlist_id = playlist_uri.split(':')[-1]
-        playlist = spotify.playlist(playlist_id = playlist_id)
-        playlist_list.append(playlist)
+        playlist_id_list.append(playlist_id)
 
-    playlist_info_list = []
+    threads = []
+    for index, playlist_id in enumerate(playlist_id_list):
+        playlist_name = playlist_names[index]
+
+        thread = threading.Thread(target = get_playlist_information, args = (playlist_id, playlist_name, session['email']))
+        threads.append(thread)
+        thread.start()
+
+    for thread in threads:
+        thread.join()
+        
+    return Queue.get()
+
+def get_playlist_information(playlist_id, playlist_name, email) -> []:
+
     track_names = []
     track_albums = []
     track_artists = []
     track_durations = []
+    date = ''
 
-    for index, playlist in enumerate(playlist_list):
-        for track in playlist['tracks']['items']:
-            track_names.append(track['track']['name'])
-            track_albums.append(track['track']['album']['name'])
-            track_artists.append(track['track']['artists'][0]['name'])
-            track_durations.append(datetime.timedelta(milliseconds = track['track']['duration_ms']))
+    playlist = spotify.playlist(playlist_id = playlist_id)
+    i = 0
+    while i < playlist['tracks']['total']:
+        batch = spotify.playlist_tracks(playlist_id = playlist_id, offset = i, limit = 50)
+        for playlist_track in batch['items']:
+            track_names.append(playlist_track['track']['name'])
+            track_albums.append(playlist_track['track']['album']['name'])
+            track_artists.append(playlist_track['track']['artists'][0]['name'])
+            date = str(datetime.timedelta(milliseconds = playlist_track['track']['duration_ms']))
+            date = date.split(':')
+            track_durations.append(f'{date[1]}:{date[2][0:2]}')
+        
+        i += 50
 
-        playlist_info_list.append(
-            [playlist_names[index], track_names, track_albums, track_artists, track_durations]
-        )
+    unique_playlist_id = str(uuid.uuid4())
+    cache[f'{email}, {unique_playlist_id}'] = [playlist_name, track_names, track_albums, track_artists, track_durations, playlist_id]
 
-        track_names = []
-        track_albums = []
-        track_artists = []
-        track_durations = []
-
-    return playlist_info_list
+    Queue.put(unique_playlist_id)

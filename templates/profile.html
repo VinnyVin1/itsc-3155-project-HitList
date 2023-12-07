@@ -42,7 +42,7 @@
                     <p>User unique identifier</p>
     
                     <!--This href should link to a users uploaded playlists later on, but for now i just linked it to the playlist html page-->
-                    <p><a href="{{ url_for('playlist_page') }}">Playlists</a></p>
+                    <p><a href="{{ url_for('get_user_playlists') }}">Playlists</a></p>
     
                     <!-- I think the account settings page might need to be unique to each user -->
                     <p><a href="{{ url_for('account_settings_page') }}">Settings</a></p>
