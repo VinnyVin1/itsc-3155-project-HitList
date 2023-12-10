@@ -2,37 +2,66 @@
 
 {% block body %}
     <header>
-        <nav class="navbar">
-            <a id="hitlist-brand" href="/">HitList</a>
-            <div class="navlinks">
-                <ul class="navbar-list">
-                    <li class="nav-item">
-                        <a class="home" href="{{ url_for('index_page') }}">Home</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="sign-in" href="{{ url_for('signin_page') }}">Sign-In</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="sign-up" href="{{ url_for('signup_page') }}">Sign-Up</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="discussion_page" href="{{ url_for('discussion_page') }}">Discussion</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="contact" href="{{ url_for('contact_page') }}">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="contact" href="{{ url_for('playlist_page') }}">Playlists</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="contact" href="{{ url_for('account_settings_page') }}">Account</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
+        <header>
+            <nav class="navbar">
+                <a id="hitlist-brand" href="/">HitList</a>
+                <div class="navlinks">
+                    <ul class="navbar-list">
+                        <li class="nav-item">
+                            <a class="home" href="{{ url_for('index_page') }}">Home</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="signin_page" href="{{ url_for('signin_page') }}">Sign-In</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="sign-up" href="{{ url_for('signup_page') }}">Sign-Up</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="discussion_page" href="{{ url_for('discussion_page') }}">Discussion</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="contact_page" href="{{ url_for('contact_page') }}">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="profile_page" href="{{ url_for('profile_page') }}">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="account_settings_page" href="{{ url_for('account_settings_page') }}">Settings/Support</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
 
     <main class="signup-main">
-        
+        <form action="/sign_up_page" method="post" class="signup-form">
+            <h1>Sign up</h1>
+            <div class="mb-3">
+                <label for="first_name" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" required>
+
+                <label for="last_name" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" required>
+
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required>
+
+                <label for="display_name" class="form-label">Display Name</label>
+                <input type="text" class="form-control" id="display_name" name="display_name" required>
+
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+
+                <label for="confirm_password" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+
+                <label class="form-check-label" for="auth">Would you like to authorize your spotify account with us?</label>
+                <input class="form-check-input" type="checkbox" id="auth" value="checked" name="auth">
+            </div>
+            <button type="submit" class="btn btn-primary">Sign up</button>
+        </form>
     </main>
 {% endblock %}

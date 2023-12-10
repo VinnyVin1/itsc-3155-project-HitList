@@ -10,7 +10,7 @@
                         <a class="home" href="{{ url_for('index_page') }}">Home</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="sign-in" href="{{ url_for('signin_page') }}">Sign-In</a>
+                        <a class="signin_page" href="{{ url_for('signin_page') }}">Sign-In</a>
                     </li>
                     <li class="nav-item">
                         <a class="sign-up" href="{{ url_for('signup_page') }}">Sign-Up</a>
@@ -19,59 +19,49 @@
                         <a class="discussion_page" href="{{ url_for('discussion_page') }}">Discussion</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="contact" href="{{ url_for('contact_page') }}">Contact</a>
+                        <a class="contact_page" href="{{ url_for('contact_page') }}">Contact</a>
                     </li>
                     <li class="nav-item">
-                        <a class="contact" href="{{ url_for('playlist_page') }}">Playlists</a>
+                        <a class="profile_page" href="{{ url_for('profile_page') }}">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a class="contact" href="{{ url_for('account_settings_page') }}">Account</a>
+                        <a class="account_settings_page" href="{{ url_for('account_settings_page') }}">Settings/Support</a>
                     </li>
                 </ul>
             </div>
         </nav>
     </header>
 
-    <main class="contact_page">
-        <div class="contact_image">
-            <img src="{{ url_for('static', filename='images/vinyl.jpeg') }}" alt="Vinyl">
-        </div>
-        <div class="contact_form">
-            <form method="POST" action="contact_us" class="contact_page_form">
-                <label for="first_name">First Name:</label>
-                <br>
-                <input type="text" name="first_name" id="first_name" required>
-                <br>
+<main class="contact_page">
+    <div class="contact_image">
+        <img src="{{ url_for('static', filename='images/vinyl.jpeg') }}" alt="Vinyl">
+    </div>
+    <div class="contact_form">
+        <form method="POST" action="/contact_us" class="contact_page_form">
+            <label for="first_name">First Name:</label>
+            <br>
+            <input type="text" name="first_name" id="first_name" required>
+            <br>
 
-                <label for="last_name">Last Name:</label>
-                <br>
-                <input type="text" name="last_name" id="last_name" required>
-                <br>
+            <label for="last_name">Last Name:</label>
+            <br>
+            <input type="text" name="last_name" id="last_name" required>
+            <br>
 
-                <label for="email">Email:</label>
-                <br>
-                <input type="email" name="email" id="email" required>
-                <br>
+            <label for="email">Email:</label>
+            <br>
+            <input type="email" name="email" id="email" required>
+            <br>
 
-                <label for="message">Message:</label>
-                <br>
-                <textarea name="message" id="message" required></textarea>
-                <br>
+            <label for="message">Message:</label>
+            <br>
+            <textarea name="message" id="message" required></textarea>
+            <br>
 
-                <button type="submit" onclick="clearForm()" >Send Message</button>
-            </form>
-        </div>
-    </main>
-        
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/contact.css') }}">
-        <script>
-            /* clears the form after submit button is pressed */
-            function clearForm() {
-                document.getElementById('first_name').value = '';
-                document.getElementById('last_name').value = '';
-                document.getElementById('email').value = '';
-                document.getElementById('message').value = '';
-            }
-        </script>
-    </main>
+            <button type="submit" onclick="clearForm()" >Send Message</button>
+        </form>
+    </div>
+</main>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/contact.css') }}">
 {% endblock %}
