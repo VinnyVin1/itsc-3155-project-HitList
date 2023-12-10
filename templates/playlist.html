@@ -1,6 +1,9 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+<head>
+    <script src="../static/js/playlist.js" defer></script>
+</head>
 <body>
     <header>
         <nav class="navbar">
@@ -35,54 +38,53 @@
     <main class="playlist-main">
         <div class="playlist-container">
             <div class="playlist-table">
-                <h2>Playlist Name</h2>
+                <h2>{{ playlist_data[0] }}</h2>
                 <table class="table">
-                    <thead>
-                        <th>#</th>
-                        <th>Song</th>
-                        <th>Artist</th>
-                        <th>Genre</th>
-                    </thead>
-                    <tbody>
-                        <!-- dummy information for now-->
-                        <tr>
-                            <td>1</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                    </tbody>
+                <tr>
+                    <td>#</td>
+                    <td>Song</td>
+                    <td>Album</td>
+                    <td>Artist</td>
+                    <td>Duration</td>
+                </tr>
+                {% for data in playlist_data[1] %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{  playlist_data[1][loop.index-1] }}</td>
+                    <td>{{ playlist_data[2][loop.index-1] }}</td>
+                    <td>{{ playlist_data[3][loop.index-1] }}</td>
+                    <td>{{ playlist_data[4][loop.index-1] }}</td>
+                </tr>
+                {% endfor %}
                 </table>
             </div>
             <div class="playlist">
+                {% if logged_in %}
                 <div class="user-playlists">
-                    <h2>Playlists</h2>
-                    <ul>
-                        <li>
-                            <input class="form-check-input" type="radio" name="playlist" id="playlist-1">
-                            <label class="form-check-label" for="playlist-1">Playlist 1</label>
-                        </li>
-                        <li>
-                            <input class="form-check-input" type="radio" name="playlist" id="playlist-2">
-                            <label class="form-check-label" for="playlist-1">Playlist 2</label>
-                        </li>
-                        <li>
-                            <input class="form-check-input" type="radio" name="playlist" id="playlist-3">
-                            <label class="form-check-label" for="playlist-1">Playlist 3</label>
-                        </li>
-                    </ul>
+                    <h2>Your Playlists:</h2>
+                    <form action="/playlist/<playlist_id>" method="POST" class="playlist-form">
+                        <ul>
+                            {% for name, key in names %}   
+                            <li>
+                                <input class="form-check-input" type="radio" name="playlist" id="playlist-1" value="{{ key }}">
+                                <label class="form-check-label" for="playlist-1">{{ name }}</label>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </form>
                 </div>
+                {% endif %}
                 <div class="playlist-info">
                     <h2>Playlist Details</h2>
                     <ul>
                         <li>
-                            <p>Number of songs: </p>
+                            <p>Number of songs: {{ playlist_data[1] | length }}</p>
                         </li>
                         <li>
-                            <p>Date created: </p>
+                            <p>Owner: {{ owner }}</p>
                         </li>
                         <li>
-                            <p>Number of genres: </p>
+                            <p>Number of Artists: {{ unique_artists | length }} </p>
                         </li>
                     </ul>
                 </div>
