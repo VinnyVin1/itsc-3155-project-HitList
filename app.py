@@ -4,7 +4,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from dotenv import load_dotenv
 from os import getenv
-from src.models import db, User
+from .src.models import db, User, Posts
 import os 
 import requests
 import base64
@@ -39,6 +39,14 @@ cache = dict()
 
 # Functions to get pages
 
+
+##app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+##db.init_app(app)
+
+##db.create_all(app=app)
+
+# Functions to get pages
 @app.get('/')
 def index_page():
     return render_template('index.html')
@@ -56,6 +64,13 @@ def signup_page():
 
 @app.get('/discussion_page')
 def discussion_page():
+    return render_template('discussion.html')
+
+@app.post('/discussion_page')
+def createdPost():
+    new_post =  Posts(title = request.form.get('title'),created = datetime.datetime.now(), user_name = session['username'],content = request.form.get('content'))
+    db.session.add(new_post)
+    db.session.commit()
     return render_template('discussion.html')
 
 @app.route('/contact_page')
@@ -204,7 +219,7 @@ def authorize_spotify_url():
 
 @app.post('/sign_up_page')
 def sign_up():
-
+    display_name = request.form.get('display_name')
     first_name = request.form.get('first_name')
     last_name = request.form.get('last_name')
     email = request.form.get('email')
@@ -221,7 +236,7 @@ def sign_up():
 
     hashed_password = bcrypt.generate_password_hash(raw_password, 10).decode()
 
-    new_user = User(username=username, password=hashed_password, first_name=first_name, last_name=last_name, email=email)
+    new_user = User(display_name = display_name, username=username, password=hashed_password, first_name=first_name, last_name=last_name, email=email)
         
     db.session.add(new_user)
     db.session.commit()
@@ -258,7 +273,11 @@ def sign_in():
 @app.post('/profile_info')
 def profile_info():
     # get data here when more functionality is established 
-    return redirect('account_settings.html')
+    return redirect('index.html')
+
+if __name__ == '__main__':
+    db.create_all()
+    ##return redirect('account_settings.html')
 
 @app.post('/send_contact')
 def send_contact():
