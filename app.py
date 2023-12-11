@@ -4,8 +4,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from dotenv import load_dotenv
 from os import getenv
-from .src.models import db, User, Posts
-import os 
+from src.models import db, User, Posts
 import requests
 import base64
 import datetime
@@ -19,10 +18,9 @@ contact_storage = []
 
 load_dotenv()
 
-app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{os.getenv("db_user")}:{os.getenv("db_password")}@{os.getenv("db_host")}:{os.getenv("db_port")}/{os.getenv("db_name")}'
+app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{getenv("db_user")}:{getenv("db_password")}@{getenv("db_host")}:{getenv("db_port")}/{getenv("db_name")}'
 app.secret_key = getenv('FLASK_SECRET_KEY')
 db.init_app(app)
-
 bcrypt = Bcrypt(app)
 
 spotify = spotipy.Spotify(client_credentials_manager = SpotifyClientCredentials())
@@ -39,56 +37,75 @@ cache = dict()
 
 # Functions to get pages
 
-
-##app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-##db.init_app(app)
-
-##db.create_all(app=app)
-
-# Functions to get pages
 @app.get('/')
 def index_page():
     return render_template('index.html')
 
 @app.get('/signin_page')
 def signin_page():
-
     if 'email' in session:
         return redirect('discussion_page')
     return render_template('signin.html')
 
 @app.get('/signup_page')
 def signup_page():
+    if session:
+        return redirect(url_for('discussion_page'))
     return render_template('signup.html')
 
 @app.get('/discussion_page')
 def discussion_page():
-    return render_template('discussion.html')
+    date = datetime.datetime.now()
+    post_list = Posts.query.all()
+    if not session:
+        return render_template('discussion.html', post_list = post_list)
+    return render_template('discussion.html', display_name = session['display_name'], username = session['username'], date = date.strftime(f'{"%d"} {"%B"} {"%Y"} {"%X"}'), post_list = post_list)
 
 @app.post('/discussion_page')
 def createdPost():
-    new_post =  Posts(title = request.form.get('title'),created = datetime.datetime.now(), user_name = session['username'],content = request.form.get('content'))
+    new_post =  Posts(title = request.form.get('title'), created = datetime.datetime.now(), user_name = session['username'], content = request.form.get('content'))
+    post_list = Posts.query.all()
     db.session.add(new_post)
     db.session.commit()
-    return render_template('discussion.html')
+    date = datetime.datetime.now()
+    return render_template('discussion.html', display_name = session['display_name'], username = session['username'], date = date.strftime(f'{"%d"} {"%B"} {"%Y"} {"%X"}'), post_list = post_list)
 
 @app.route('/contact_page')
 def contact_page():
     return render_template('contact.html')
 
-@app.route('/profile_page')
-def profile_page():
-    return render_template('profile.html')
+@app.get('/profile/<username>')
+def profile_page(username):
+    user = User.query.filter_by(username = username).first_or_404('Username not found, please check spelling and try again')
+    is_user = True
+    user_has_playlists = False
+    for key in list(cache.keys()):
+        if key.split(', ')[0] == user.username:
+            user_has_playlists = True
+            break
+
+    user_posts = Posts.query.filter_by(user_name = user.username).all()
+    print(f'user posts are {user_posts}')
+    if not session or session['username'] != user.username:
+        return render_template('profile.html', display_name = user.display_name, user_id = user.user_id, username = username, is_user = False, user_posts = user_posts, user_has_playlists = user_has_playlists)
+    return render_template('profile.html', display_name = user.display_name, user_id = user.user_id, username = username, is_user = True, user_posts = user_posts, user_has_playlists = user_has_playlists)
 
 @app.route('/get_user_playlists')
 def get_user_playlists():
     if 'access_token' not in session and 'refresh_token' not in session:
         abort(403, 'Not authorized with Spotify, please connect to continue')
+    print(f'session is {session}')
+    usernames = []
+    playlist_id = ''
+    print(list(cache.keys()))
+    for index, key in enumerate(list(cache.keys())):
+        usernames.append(key.split(', ')[0])
+        if key.split(', ')[0] == session['username']:
+           playlist_id = key.split(', ')[1]
 
     try:
-        if session['playlists'] == True:
-            return redirect(url_for('playlist', playlist_id = list(cache.keys())[0].split(', ')[1]))
+        if session['playlists'] == True and session['username'] in usernames:
+            return redirect(url_for('playlist', playlist_id = playlist_id))
     except IndexError:
         session['playlists'] = False
         return redirect('get_user_playlists')
@@ -109,48 +126,77 @@ def get_user_playlists():
             secondary_header = {
                 'Authorization': f'Bearer {new_token}'
             }
-
             secondary_response = requests.get("https://api.spotify.com/v1/me/playlists", headers = secondary_header)
             secondary_data = secondary_response.json()
             unique_playlist_id = get_information(secondary_data)
             session['playlists'] = True
-            return redirect(url_for('playlist', playlist_id = unique_playlist_id))
+            return redirect(url_for('get_playlists_by_user', username = session['username']))
         else:
             data = get_response.json()
             unique_playlist_id = get_information(data)
             session['playlists'] = True
-            return redirect(url_for('playlist', playlist_id = unique_playlist_id))
+            return redirect(url_for('get_playlists_by_user', username = session['username']))
 
 @app.get('/playlist/<playlist_id>')
 def playlist(playlist_id):
-
-    logged_in = 'email' in list(session.keys())
+    logged_in = False
+    if session:
+        logged_in = True
 
     id_list = []
+    username = ''
     for key in list(cache.keys()):
         id_list.append(key.split(', ')[1])
 
     if playlist_id not in id_list:
         return redirect(url_for('discussion_page'))
     else:
-        playlist_data = cache[f'{session["email"]}, {playlist_id}']
+
+        for key in list(cache.keys()):
+            print(f'key is {key}')
+            if key.split(', ')[1] == playlist_id:
+                username = key.split(', ')[0]
+        print(f'username is {username}')
+        playlist_data = cache[f'{username}, {playlist_id}']
         user_playlist = spotify.playlist(playlist_id = playlist_data[-1])
         owner = user_playlist['owner']['display_name']
         unique_artists = set(playlist_data[3])
+
         names = []
-        for key in list(cache.keys()):
-            if key.split(', ')[0] == session['email']:
-                names.append((cache[key][0], key.split(', ')[1]))
+        if session:
+            for key in list(cache.keys()):
+                if key.split(', ')[0] == session['username']:
+                    names.append((cache[key][0], key.split(', ')[1]))
+
         return render_template('playlist.html', 
                                playlist_data = playlist_data, 
                                names = names, 
                                owner = owner, 
                                unique_artists = unique_artists,
                                logged_in = logged_in)
+    
+@app.get('/playlists/<username>')
+def get_playlists_by_user(username):
+    user_playlist_data = {}
+    current_cache_username = ''
+    for key, value in cache.items():
+        current_cache_username= str(key).split(', ')[0]
+        if username == current_cache_username:
+            user_playlist_data[str(key).split(', ')[1]] = value
 
+    return render_template('playlist.html', user_playlist_data = user_playlist_data)
+        
 @app.route('/account_settings_page')
 def account_settings_page():
-    return render_template('account_settings.html')
+    if not session:
+        return redirect(url_for('signin_page'))
+    user = User.query.filter_by(username = session['username']).first()
+    first_name = user.first_name
+    last_name = user.last_name
+    email = user.email
+    username = user.username
+    display_name = user.display_name
+    return render_template('account_settings.html', username = username, email = email, first_name = first_name, last_name = last_name, display_name = display_name)
 
 @app.route('/account_contact_page')
 def account_contact_page():
@@ -242,6 +288,8 @@ def sign_up():
     db.session.commit()
     
     session['email'] = email
+    session['username'] = username
+    session['display_name'] = display_name
     session['playlists'] = False 
 
     if spotify_allowed:
@@ -263,27 +311,70 @@ def sign_in():
         abort(401)
 
     session['email'] = email
+    session['username'] = user_exists.username
     session['playlists'] = False
+    session['display_name'] = user_exists.display_name
 
     if user_exists.spotify_refresh_token != None:
         session['refresh_token'] = user_exists.spotify_refresh_token
         
-    return redirect('profile_page')
+    return redirect(f'/profile/{user_exists.username}')
 
 @app.post('/profile_info')
 def profile_info():
     # get data here when more functionality is established 
     return redirect('index.html')
 
-if __name__ == '__main__':
-    db.create_all()
-    ##return redirect('account_settings.html')
-
 @app.post('/send_contact')
 def send_contact():
     # get data here when more functionality is established 
     return redirect('account_contact.html')
 
+@app.post('/account_settings_page')
+def change_account_settings():
+    user = User.query.filter_by(username = session['username']).first()
+    if request.form['submit-btn'] == 'change_first_name':
+        user.first_name = request.form.get('first_name')
+        db.session.add(user)
+        db.session.commit()
+    elif request.form['submit-btn'] == 'change_last_name':
+        user.last_name = request.form.get('last_name')
+        db.session.add(user)
+        db.session.commit()
+    elif request.form['submit-btn'] == 'change_username':
+        user_posts = Posts.query.filter_by(user_name = session['username']).all()
+        for post in user_posts:
+            post.user_name = request.form.get('username')
+            db.session.add(post)
+            db.session.commit()
+        user.username = request.form.get('username')
+        session['username'] = user.username
+        db.session.add(user)
+        db.session.commit()
+    elif request.form['submit-btn'] == 'change_display_name':
+        user.display_name = request.form.get('display_name')
+        session['display_name'] = user.display_name
+        db.session.add(user)
+        db.session.commit()
+    elif request.form['submit-btn'] == 'change_email':
+        user.email = request.form.get('email')
+        db.session.add(user)
+        db.session.commit()
+    elif request.form['submit-btn'] == 'change_password':
+        raw_password = request.form.get('password')
+        hashed_password = Bcrypt.generate_password_hash(raw_password, 10).decode()
+        user.password = hashed_password
+        db.session.add(user)
+        db.session.commit()
+    elif request.form['submit-btn'] == 'delete-account':
+        db.session.delete(user)
+        db.session.commit()
+        session.clear()
+    elif request.form['submit-btn'] == 'logout':
+        session.clear()
+        return redirect('/')
+
+    return redirect('account_settings_page')
 
 # Functions for Spotify API
 
@@ -300,6 +391,8 @@ def get_new_access_token():
     spotify_response = requests.post('https://accounts.spotify.com/api/token', data = data)
     new_data = spotify_response.json()
     new_access_token = new_data.get('access_token')
+    session['access_token'] = new_access_token
+    session['refresh_token'] = new_data.get('refresh_token')
     return new_access_token
 
 def get_information(data):
@@ -318,7 +411,7 @@ def get_information(data):
     for index, playlist_id in enumerate(playlist_id_list):
         playlist_name = playlist_names[index]
 
-        thread = threading.Thread(target = get_playlist_information, args = (playlist_id, playlist_name, session['email']))
+        thread = threading.Thread(target = get_playlist_information, args = (playlist_id, playlist_name, session['username']))
         threads.append(thread)
         thread.start()
 
@@ -327,7 +420,7 @@ def get_information(data):
         
     return Queue.get()
 
-def get_playlist_information(playlist_id, playlist_name, email) -> []:
+def get_playlist_information(playlist_id, playlist_name, username) -> []:
 
     track_names = []
     track_albums = []
@@ -350,6 +443,6 @@ def get_playlist_information(playlist_id, playlist_name, email) -> []:
         i += 50
 
     unique_playlist_id = str(uuid.uuid4())
-    cache[f'{email}, {unique_playlist_id}'] = [playlist_name, track_names, track_albums, track_artists, track_durations, playlist_id]
+    cache[f'{username}, {unique_playlist_id}'] = [playlist_name, track_names, track_albums, track_artists, track_durations, playlist_id]
 
     Queue.put(unique_playlist_id)

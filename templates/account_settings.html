@@ -1,6 +1,9 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+    <head>
+        <script src="../static/js/account_settings.js" defer></script>
+    </head>
     <header>
         <nav class="navbar">
             <a id="hitlist-brand" href="/">HitList</a>
@@ -21,9 +24,6 @@
                     <li class="nav-item">
                         <a class="contact_page" href="{{ url_for('contact_page') }}">Contact</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="profile_page" href="{{ url_for('profile_page') }}">Profile</a>
-                    </li>
                     <li class="nav-item active">
                         <a class="account_settings_page" href="{{ url_for('account_settings_page') }}">Settings/Support</a>
                     </li>
@@ -34,36 +34,75 @@
 
     <main class="prof-settings-main">
         <div class="prof-settings-links-container">
-            <h1>Profile Name</h1>
+            <h1>{{ username }}</h1>
             <img src="../static/images/profile.png" alt="Empty Profile">
+            <a href="{{ url_for('profile_page', username = username)}}">Profile</a>
             <a href="{{ url_for('account_settings_page') }}" class="selected">Settings</a>
             <a href="{{ url_for('account_contact_page') }}">Contact</a>
         </div>
-        <div>
-            <form method="post" action="get_profile_info">
-                <div class="prof-settings-form-group">
-                    <label for="first-name">First Name</label>
-                    <input type="text" class="prof-settings-form-control" id="first-name" required>
+        <div class="username-data">
+            <h2>First Name: {{ first_name }}</h2>
+            <br>
+            <h2>Last Name: {{ last_name }}</h2>
+            <br>
+            <h2>Username: {{ username }}</h2>
+            <br>
+            <h2>Display Name: {{ display_name }}</h2>
+            <br>
+            <h2>Email: {{ email }}</h2>
+                <button type="button" class="settings-btn" value="change_first_name">Change First Name</button>
+            <form method="post" action="{{ url_for('account_settings_page')}}">
+                <div class="prof-settings-form-group hidden" value="change_first_name">
+                    <label for="first_name">New First Name:</label>
+                    <input type="text" name="first_name" id="first_name" class="prof-settings-form-control" required>
+                    <button name="submit-btn" type="submit" value="change_first_name">Submit</button>
                 </div>
-                <div class="prof-settings-form-group">
-                    <label for="last-name">Last Name</label>
-                    <input type="text" class="prof-settings-form-control" id="last-name" required>
+            </form>
+            <button type="button" name="submit-btn" class="settings-btn" value="change_last_name">Change Last Name</button>
+            <form method="post" action="{{ url_for('account_settings_page')}}">
+                <div class="prof-settings-form-group hidden" value="change_last_name">
+                    <label for="last_name">New Last Name:</label>
+                    <input type="text" name="last_name" id="last_name" class="prof-settings-form-control" required>
+                    <button name="submit-btn" type="submit" value="change_last_name">Submit</button>
                 </div>
-                <div class="prof-settings-form-group">
-                    <label for="usermame">Username</label>
-                    <input type="text" class="prof-settings-form-control" id="username" required>
+            </form>
+            <button type="button" name="submit-btn" class="settings-btn" value="change_username">Change Username</button>
+            <form method="post" action="{{ url_for('account_settings_page')}}">
+                <div class="prof-settings-form-group hidden" value="change_username">
+                    <label for="username">New Username:</label>
+                    <input type="text" name="username" id="username" class="prof-settings-form-control" required>
+                    <button name="submit-btn" type="submit" value="change_username">Submit</button>
                 </div>
-                <button type="submit" class="settings-btn">Change Username</button>
-                <div class="prof-settings-form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="prof-settings-form-control" id="email" required>
+            </form>
+            <button type="button" name="submit-btn" class="settings-btn" value="change_display_name">Change Display Name</button>
+            <form method="post" action="{{ url_for('account_settings_page')}}">
+                <div class="prof-settings-form-group hidden" value="change_display_name">
+                    <label for="display_name">New Display Name:</label>
+                    <input type="text" name="display_name" id="display_name" class="prof-settings-form-control" required>
+                    <button name="submit-btn" type="submit" value="change_display_name">Submit</button>
                 </div>
-                <button type="submit" class="setting-btn">Change Email</button>
-                <!-- <div class="prof-settings-form-group">
-                    <label for="paswword">Password</label>
-                    <input type="password" class="prof-settings-form-control" id="password" required>
+            </form>
+            <button type="button" name="submit-btn" class="settings-btn" value="change_email">Change Email</button> 
+            <form method="post" action="{{ url_for('account_settings_page')}}">
+                <div class="prof-settings-form-group hidden" value="change_email">
+                    <label for="email">New Email:</label>
+                    <input type="text" name="email" id="email" class="prof-settings-form-control" required>
+                    <button name="submit-btn" type="submit" value="change_email">Submit</button>
                 </div>
-                <button type="submit" class="prof-setting-btn">Change Password</button> -->
+            </form>
+            <button type="button" name="submit-btn" class="settings-btn" value="change_password">Change Password</button>
+            <form method="post" action="{{ url_for('account_settings_page')}}">
+                <div class="prof-settings-form-group hidden" value="change_password">
+                    <label for="password">New Password:</label>
+                    <input type="text" name="password" id="password" class="prof-settings-form-control" required>
+                    <button name="submit-btn" type="submit" value="change_password">Submit</button>
+                </div>
+            </form>
+            <form method="post" action="{{ url_for('account_settings_page')}}">
+                <button type="submit" name="submit-btn" class="settings-btn" value="logout">Log out</button>
+            </form>
+            <form method="post" action="{{ url_for('account_settings_page')}}">
+                <button type="submit" name="submit-btn" class="settings-btn" value="delete-account">Delete Account</button>
             </form>
         </div>
     </main>

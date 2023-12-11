@@ -1,12 +1,15 @@
-// 'use strict';
+'use strict'; 
 
-// const postOrder = document.querySelector('.order');
+const buttons = document.querySelectorAll('.settings-btn'); 
+const divs = document.querySelectorAll('.prof-settings-form-group'); 
 
-// postOrder.addEventListener('click', changeColor());
-
-// function changeColor() {
-//     if(postOrder.textContent === 'Newest') {
-//         postOrder.classList.add('selected');
-        
-//     }
-// }
+for (let i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener("click", () => {
+        if (divs[i].classList.contains('hidden')) {
+            divs.forEach((div) => {div.classList.add('hidden')}); 
+            divs[i].classList.remove('hidden'); 
+        } else {
+            divs[i].classList.add('hidden'); 
+        }
+    }); 
+}

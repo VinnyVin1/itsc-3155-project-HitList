@@ -6,7 +6,6 @@ class User(db.Model):
 
     __tablename__ = 'User'
 
-    
     display_name = db.Column(db.String(255), nullable = False)
     user_id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(255), nullable = False)
@@ -15,10 +14,8 @@ class User(db.Model):
     last_name = db.Column(db.String(255), nullable = False)
     email = db.Column(db.String(255), nullable = False, unique = True)
     spotify_refresh_token = db.Column(db.String(512), nullable = True)
-    display_name = db.Column(db.String(255), nullable = False)
 
-
-    def __init__(self,display_name: str, username: str, password: str, first_name: str, last_name: str, email: str) -> None:
+    def __init__(self, display_name: str, username: str, password: str, first_name: str, last_name: str, email: str) -> None:
         self.display_name = display_name
         self.username = username
         self.password = password 
