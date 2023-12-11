@@ -337,6 +337,13 @@ footer {
     margin: 0 15px;
 }
 
+.discussion-form-group {
+    width: 75vw;
+}
+
+.hidden {
+    display: none;
+}
 
 /**** Contact Main ****/
 .contact_page {
@@ -447,7 +454,7 @@ button[type="submit"] {
 }
 
 
-/**** Acount Settings Main ****/
+/**** Account Settings Main ****/
 .prof-settings-main {
     background-color: var(--clr-neutral-A);
     height: 90vh;
@@ -489,6 +496,7 @@ button[type="submit"] {
     display: flex;
     flex-direction: column;
     gap: 50px;
+    padding: 0.1rem;
     
 }
 
@@ -496,7 +504,10 @@ button[type="submit"] {
     display: flex;
     flex-direction: row;
     align-items: center;
-    
+}
+
+.hidden {
+    display: none;
 }
 
 .prof-settings-form-group label {
@@ -520,6 +531,18 @@ button[type="submit"] {
     margin-left: 325px;
     font-size: 20px;
 }
+
+button[type="button"] {
+    background-color: var(--clr-red);
+    color: var(--clr-neutral-A);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+
 
 
 /**** Account Contact Main ****/

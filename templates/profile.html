@@ -22,9 +22,6 @@
                     <li class="nav-item">
                         <a class="contact_page" href="{{ url_for('contact_page') }}">Contact</a>
                     </li>
-                    <li class="nav-item active">
-                        <a class="profile_page" href="{{ url_for('profile_page') }}">Profile</a>
-                    </li>
                     <li class="nav-item">
                         <a class="account_settings_page" href="{{ url_for('account_settings_page') }}">Settings/Support</a>
                     </li>
@@ -38,68 +35,39 @@
             <div class="profile-container">
                 <img src="../static/images/default_profile_picture.jpg" alt="profile picture">
                 <div class="user-info-container">
-                    <p>Username</p>
-                    <p>User unique identifier</p>
-    
-                    <!--This href should link to a users uploaded playlists later on, but for now i just linked it to the playlist html page-->
-                    <p><a href="{{ url_for('get_user_playlists') }}">Playlists</a></p>
+                    <p> {{ display_name }} </p>
+                    <p>User ID: {{ user_id }}</p>
+                    {% if is_user %}
+
+                    <p><a href="{{ url_for('get_user_playlists')}}">Upload Playlists</a></p>
     
                     <!-- I think the account settings page might need to be unique to each user -->
                     <p><a href="{{ url_for('account_settings_page') }}">Settings</a></p>
+                    {% endif %}
+                    {% if user_has_playlists %}
+                    <p><a href="{{ url_for('get_playlists_by_user', username=username) }}">Playlists</a></p>
+                    {% endif %}
                 </div>
             </div>
             <div class="user-post-container">
-                <!-- dummy posts for now -->
+                {% if user_posts | length <= 0 %}
+                    {% if is_user %}
+                    <h1>You have no posts! Create one by going to our <a href="{{ url_for('discussion_page')}}">discussion</a> page and clicking the + button!</h1>
+                    {% else %}
+                    <h1>This user has no posts</h1>
+                    {% endif %}
+                {% else %}
+                <h3>{{ display_name }} Posts:</h3>
+                {% for post in user_posts %}
                 <div class="user-post">
                     <article>
-                        Post 1
+                        <h4>{{post.user_name}}</h4>
+                        <p>{{post.title}} {{post.created}}</p>
+                        <p>{{post.content}}</p>
                     </article>
                 </div>
-                <div class="user-post">
-                    <article>
-                        Post 2
-                    </article>
-                </div>
-                <div class="user-post">
-                    <article>
-                        Post 3
-                    </article>
-                </div>
-                <div class="user-post">
-                    <article>
-                        Post 4
-                    </article>
-                </div>
-                <div class="user-post">
-                    <article>
-                        Post 5
-                    </article>
-                </div>
-                <div class="user-post">
-                    <article>
-                        Post 6
-                    </article>
-                </div>
-                <div class="user-post">
-                    <article>
-                        Post 7
-                    </article>
-                </div>
-                <div class="user-post">
-                    <article>
-                        Post 8
-                    </article>
-                </div>
-                <div class="user-post">
-                    <article>
-                        Post 9
-                    </article>
-                </div>
-                <div class="user-post">
-                    <article>
-                        Post 10
-                    </article>
-                </div>
+                {% endfor %}
+                {% endif %}
             </div>
         </div>
     </main>

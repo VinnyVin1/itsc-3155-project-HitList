@@ -1,6 +1,9 @@
 {% extends 'layout.html' %}
 
 {% block body %}
+    <head>
+        <script src="../static/js/discussion.js" defer></script>
+    </head>
     <header>
         <nav class="navbar">
             <a id="hitlist-brand" href="/">HitList</a>
@@ -22,9 +25,6 @@
                         <a class="contact_page" href="{{ url_for('contact_page') }}">Contact</a>
                     </li>
                     <li class="nav-item">
-                        <a class="profile_page" href="{{ url_for('profile_page') }}">Profile</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="account_settings_page" href="{{ url_for('account_settings_page') }}">Settings/Support</a>
                     </li>
                 </ul>
@@ -33,45 +33,50 @@
     </header>
 
     <main class="discussion-main">
+        {% if username %}
         <div class="discussion-main-profile">
-            ##make a button for post
-            <a class="discussion-post-btn" href="{{ url_for('discussion_page') }}"><span class="material-symbols-outlined">add</span></a>
-            <h1 id="new-post">Create a new post!</h1>
             <div class="discussion-links-container">
-                <h1>Profile Name</h1>
+                <a href="/profile/{{ username }}">{{ display_name }}</a>
                 <img src="../static/images/profile.png" alt="Empty Profile">
+                <a href="/profile/{{ username }}">Profile</a>
                 <a href="{{ url_for('discussion_page') }}" class="selected">Newest</a>
                 <a href="{{ url_for('discussion_page') }}">Oldest</a>
             </div>
+            <button class="discussion-post-btn"><span class="material-symbols-outlined">add</span></button>
         </div>
+        {% endif %}
         <div class="discussion-card">
-            <div class="discussion-card-container">
+            <div class="discussion-card-container hidden">
                 <div class="discussion-card-container-profile">
                     <div>
                         <img src="../static/images/profile.png" alt="Profile Name">
-                        <h2>Profile Name</h2>
+                        <h2>{{ display_name }}</h2>
                     </div>
-                    <h2>Date</h2>
+                    <h2>{{ date }}</h2>
                 </div>
-                <div class="form-group">
+                <div class="discussion-form-group">
                     <form action="/discussion_page" method="post">
-                    <label for="content">Title</label>
-                    <input type="text" class="form-control" id="title" name="title">
-                    <label for="content">Content</label>
-                    <textarea class="form-control" id="content" name="content" rows="3"></textarea>
-                    <button type="submit">Submit</button>
+                        <label for="content">Title</label>
+                        <input type="text" class="form-control" id="title" name="title">
+                        <label for="content">Content</label>
+                        <textarea class="form-control" id="content" name="content" rows="3"></textarea>
+                        <button type="submit">Submit</button>
                     </form>
                 </div>
-        <div class="discussion-card">
+            </div>
+            {% if not post_list %}
+            <h1>No posts available, create one by clicking the + button!</h1>
+            {% else %}
+            {% for post in post_list %}
             <div class="discussion-card-container">
                 <div class="discussion-card-container-profile">
                     <div>
                         <img src="../static/images/profile.png" alt="Profile Name">
-                        <h2>Profile Name</h2>
+                        <a href="{{ url_for('profile_page', username = post.user_name )}}"><h2>{{ post.user_name }}</h2></a>
                     </div>
-                    <h2>Date</h2>
+                    <h2>{{ post.created }}</h2>
                 </div>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet, alias porro doloribus ad, maxime ducimus debitis corrupti eligendi ullam quidem libero est, perspiciatis ipsam laudantium.</p>
+                <p>{{ post.content }}</p>
                 <div class="discussion-card-container-btns">
                     <button>Comment</button>
                     <div>
@@ -81,6 +86,8 @@
                     </div>
                 </div>
             </div>
+            {% endfor %}
+            {% endif %}
         </div>
     </main>
 {% endblock %}
