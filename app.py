@@ -4,7 +4,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from dotenv import load_dotenv
 from os import getenv
-from src.models import db, User, Posts
+from src.models import db, User, Posts, Comment 
 import requests
 import base64
 import datetime
@@ -63,12 +63,33 @@ def discussion_page():
 
 @app.post('/discussion_page')
 def createdPost():
-    new_post =  Posts(title = request.form.get('title'), created = datetime.datetime.now(), user_name = session['username'], content = request.form.get('content'))
-    post_list = Posts.query.all()
-    db.session.add(new_post)
-    db.session.commit()
-    date = datetime.datetime.now()
+    if request.form['submit'] == 'post':
+        new_post =  Posts(title = request.form.get('title'), created = datetime.datetime.now(), user_name = session['username'], content = request.form.get('content'))
+        post_list = Posts.query.all()
+        db.session.add(new_post)
+        db.session.commit()
+        date = datetime.datetime.now()
     return render_template('discussion.html', display_name = session['display_name'], username = session['username'], date = date.strftime(f'{"%d"} {"%B"} {"%Y"} {"%X"}'), post_list = post_list)
+
+@app.get('/post/<id>')
+def get_post_by_id(id):
+    post = Posts.query.filter_by(id = id).first()
+    user = 'email' in session
+    post_comments = Comment.query.filter_by(post_id = id).all()
+    if not post_comments:
+        return render_template('post.html', post = post, user = user)
+    return render_template('post.html', post = post, comments = post_comments, user = user)
+
+@app.post('/post/<id>')
+def create_comment(id):
+    content = request.form.get('content')
+    created = datetime.datetime.now()
+    user_name = session['username']
+    commet = Comment(created = created, user_name = user_name, content = content, id = id)
+    db.session.add(commet)
+    db.session.commit()
+    return redirect(url_for('get_post_by_id', id = id))
+
 
 @app.route('/contact_page')
 def contact_page():
@@ -450,7 +471,7 @@ def get_playlist_information(playlist_id, playlist_name, username) -> []:
 
     Queue.put(unique_playlist_id)
 
-@app.route('/delete_post/post_id', methods=['POST'])
+@app.route('/delete_post/<int:post_id>', methods=['POST'])
 def delete_post(post_id):
     post_to_delete = Posts.query.get_or_404(post_id)
     if post_to_delete.user_name != session['username']:

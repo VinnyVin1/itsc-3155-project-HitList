@@ -34,7 +34,7 @@
                             <label for="content">Content</label>
                             <textarea class="form-control" id="content" name="content" rows="3"></textarea>
                         </div>
-                        <button type="submit">Submit</button>
+                        <button type="submit" name="submit" value="post">Submit</button>
                     </form>
                 </div>
             </div>
@@ -47,6 +47,7 @@
                     {% endif %}
                 {% else %}
                     {% for post in post_list %}
+                        <a href="{{ url_for('get_post_by_id', id = post.id)}}"></a>
                         <div class="discussion-card-container">
                             <div class="discussion-card-container-profile">
                                 <div>
@@ -57,7 +58,7 @@
                             </div>
                             <p>{{ post.content }}</p>
                             <div class="discussion-card-container-btns">
-                                <button>Comment</button>
+                                <button class="comment-btn {{loop.index0}}">Comment</button>
                             </div>
                         </div>
                     {% endfor %}
