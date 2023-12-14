@@ -56,10 +56,25 @@ def signup_page():
 @app.get('/discussion_page')
 def discussion_page():
     date = datetime.datetime.now()
+    user = None
+    if session:
+        user = User.query.filter_by(username = session['username']).first()
     post_list = Posts.query.all()
+    post_list_with_images = []
+    post_user = ''
+    for post in post_list:
+        post_user = User.query.filter_by(username = post.user_name).first()
+        if post_user.profile_image != None:
+            post_list_with_images.append([base64.b64encode(post_user.profile_image).decode("utf-8"), post ])
+        else:
+            post_list_with_images.append([None, post])
+    user_profile_image = None
+    if user != None:
+        if user.profile_image != None:
+            user_profile_image = base64.b64encode(user.profile_image).decode('utf-8')
     if not session:
-        return render_template('discussion.html', post_list = post_list)
-    return render_template('discussion.html', display_name = session['display_name'], username = session['username'], date = date.strftime(f'{"%d"} {"%B"} {"%Y"} {"%X"}'), post_list = post_list)
+        return render_template('discussion.html', post_list = post_list_with_images)
+    return render_template('discussion.html', display_name = session['display_name'], username = session['username'], date = date.strftime(f'{"%d"} {"%B"} {"%Y"} {"%X"}'), post_list = post_list_with_images, user_profile_image = user_profile_image)
 
 @app.post('/discussion_page')
 def createdPost():
@@ -158,9 +173,12 @@ def profile_page(username):
             break
 
     user_posts = Posts.query.filter_by(user_name = user.username).all()
+    user_profile_image = None
+    if user.profile_image != None:
+        user_profile_image = base64.b64encode(user.profile_image).decode('utf-8')
     if not session or session['username'] != user.username:
-        return render_template('profile.html', display_name = user.display_name, user_id = user.user_id, username = username, is_user = False, user_posts = user_posts, user_has_playlists = user_has_playlists)
-    return render_template('profile.html', display_name = user.display_name, user_id = user.user_id, username = username, is_user = True, user_posts = user_posts, user_has_playlists = user_has_playlists)
+        return render_template('profile.html', display_name = user.display_name, user_id = user.user_id, username = username, is_user = False, user_posts = user_posts, user_has_playlists = user_has_playlists, user_profile_image = user_profile_image)
+    return render_template('profile.html', display_name = user.display_name, user_id = user.user_id, username = username, is_user = True, user_posts = user_posts, user_has_playlists = user_has_playlists, user_profile_image = user_profile_image)
 
 @app.route('/get_user_playlists')
 def get_user_playlists():
@@ -235,6 +253,11 @@ def playlist(playlist_id):
             for key in list(cache.keys()):
                 if key.split(', ')[0] == session['username']:
                     names.append((cache[key][0], key.split(', ')[1]))
+        
+        user = User.query.filter_by(username = username).first()
+        user_profile_image = None 
+        if user.profile_image != None:
+            user_profile_image = base64.b64encode(user.profile_image).decode('utf-8')
 
         return render_template('playlist.html', 
                                playlist_data = playlist_data, 
@@ -242,36 +265,48 @@ def playlist(playlist_id):
                                owner = owner, 
                                unique_artists = unique_artists,
                                logged_in = logged_in,
-                               username = username)
+                               username = username,
+                               user_profile_image = user_profile_image)
     
 @app.get('/playlists/<username>')
 def get_playlists_by_user(username):
+    user = User.query.filter_by(username = username).first()
+    user_profile_image = None 
+    if user.profile_image != None:
+        user_profile_image = base64.b64encode(user.profile_image).decode('utf-8')
     user_playlist_data = {}
+    playlist_data = {}
     current_cache_username = ''
     for key, value in cache.items():
         current_cache_username= str(key).split(', ')[0]
         if username == current_cache_username:
             user_playlist_data[str(key).split(', ')[1]] = value
 
-    return render_template('playlist.html', user_playlist_data = user_playlist_data)
+    return render_template('playlist.html', user_playlist_data = user_playlist_data, playlist_data = playlist_data, user_profile_image = user_profile_image)
         
 @app.route('/account_settings_page')
 def account_settings_page():
     if not session:
         return redirect(url_for('signin_page'))
     user = User.query.filter_by(username = session['username']).first()
+    user_profile_image = None
+    if user.profile_image != None:
+        user_profile_image = base64.b64encode(user.profile_image).decode('utf-8')
     first_name = user.first_name
     last_name = user.last_name
     email = user.email
     username = user.username
     display_name = user.display_name
-    return render_template('account_settings.html', username = username, user_id = user.user_id, email = email, first_name = first_name, last_name = last_name, display_name = display_name)
+    return render_template('account_settings.html', username = username, user_id = user.user_id, email = email, first_name = first_name, last_name = last_name, display_name = display_name, user_profile_image = user_profile_image)
 
 @app.route('/account_contact_page')
 def account_contact_page():
     user = User.query.filter_by(username = session['username']).first()
     username = user.username
-    return render_template('account_contact.html', username = username, user_id = user.user_id)
+    user_profile_image = None
+    if user.profile_image != None:
+        user_profile_image = base64.b64encode(user.profile_image).decode('utf-8')
+    return render_template('account_contact.html', username = username, user_id = user.user_id, user_profile_image = user_profile_image)
 
 def store_message_in_file(message):
     with open('contact_messages.txt', 'a') as file:
@@ -348,7 +383,7 @@ def sign_up():
 
     hashed_password = bcrypt.generate_password_hash(raw_password, 10).decode()
 
-    new_user = User(display_name = display_name, username=username, password=hashed_password, first_name=first_name, last_name=last_name, email=email)
+    new_user = User(display_name = display_name, username=username, password=hashed_password, first_name=first_name, last_name=last_name, email=email, profile_image = None)
         
     db.session.add(new_user)
     db.session.commit()
@@ -386,10 +421,14 @@ def sign_in():
         
     return redirect(f'/profile/{user_exists.username}')
 
-@app.post('/profile_info')
-def profile_info():
-    # get data here when more functionality is established 
-    return redirect('index.html')
+@app.post('/profile/<username>')
+def upload_profile_image(username):
+    user = User.query.filter_by(username = username).first()
+    image = request.files['file'].read()
+    user.profile_image = image
+    db.session.add(user)
+    db.session.commit()
+    return redirect(url_for('profile_page', username = username))
 
 @app.post('/send_contact')
 def send_contact():

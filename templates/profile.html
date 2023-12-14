@@ -6,12 +6,21 @@
         <div class="grid-container-profile">
             <div class="profile-container">
                 <h1>{{ username }}</h1>
-                <img src="../static/images/profile.png" alt="Empty Profile">
+                {% if user_profile_image != None%}
+                <img src="data:image/*;base64,{{ user_profile_image }}" alt="Avatar">
+                {% else %}
+                <img src="../static/images/default_profile_picture.jpg" alt="Default profile image">
+                {% endif %}
+                <a href="/profile/{{ username }}">Profile</a>
                 <div class="profile-links-container">
                     <h3>User ID: {{ user_id }}</h3>
                     {% if is_user %}
                     <a href="{{ url_for('get_user_playlists')}}">Playlists</a>
                     <a class="selected" href="{{ url_for('profile_page', username = username)}}">Profile</a>
+                    <form action="{{ url_for('upload_profile_image', username = username )}}" method="post" enctype="multipart/form-data">
+                        <input type="file" name="file" id="file" accept="image/*">
+                        <button type="submit">Upload</button>
+                    </form>
                     <a href="{{ url_for('account_settings_page') }}">Settings</a>
                     <a href="{{ url_for('account_contact_page') }}">Contact</a>
                     {% endif %}
