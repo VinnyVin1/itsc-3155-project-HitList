@@ -194,7 +194,8 @@ def playlist(playlist_id):
                                names = names, 
                                owner = owner, 
                                unique_artists = unique_artists,
-                               logged_in = logged_in)
+                               logged_in = logged_in,
+                               username = username)
     
 @app.get('/playlists/<username>')
 def get_playlists_by_user(username):
@@ -217,11 +218,13 @@ def account_settings_page():
     email = user.email
     username = user.username
     display_name = user.display_name
-    return render_template('account_settings.html', username = username, email = email, first_name = first_name, last_name = last_name, display_name = display_name)
+    return render_template('account_settings.html', username = username, user_id = user.user_id, email = email, first_name = first_name, last_name = last_name, display_name = display_name)
 
 @app.route('/account_contact_page')
 def account_contact_page():
-    return render_template('account_contact.html')
+    user = User.query.filter_by(username = session['username']).first()
+    username = user.username
+    return render_template('account_contact.html', username = username, user_id = user.user_id)
 
 def store_message_in_file(message):
     with open('contact_messages.txt', 'a') as file:
@@ -383,7 +386,7 @@ def change_account_settings():
         db.session.commit()
     elif request.form['submit-btn'] == 'change_password':
         raw_password = request.form.get('password')
-        hashed_password = Bcrypt.generate_password_hash(raw_password, 10).decode()
+        hashed_password = bcrypt.generate_password_hash(raw_password, 10).decode()
         user.password = hashed_password
         db.session.add(user)
         db.session.commit()
@@ -467,3 +470,14 @@ def get_playlist_information(playlist_id, playlist_name, username) -> []:
     cache[f'{username}, {unique_playlist_id}'] = [playlist_name, track_names, track_albums, track_artists, track_durations, playlist_id]
 
     Queue.put(unique_playlist_id)
+
+@app.route('/delete_post/<int:post_id>', methods=['POST'])
+def delete_post(post_id):
+    post_to_delete = Posts.query.get_or_404(post_id)
+    if post_to_delete.user_name != session['username']:
+        abort(403, "You are not authorized to delete this post.")
+    
+    db.session.delete(post_to_delete)
+    db.session.commit()
+
+    return redirect(url_for('profile_page', username=session['username']))

@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS "User" (
-    user_id serial,
+    user_id SERIAL PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     first_name VARCHAR(255) NOT NULL,
@@ -11,18 +11,19 @@ CREATE TABLE IF NOT EXISTS "User" (
 
 
 CREATE TABLE IF NOT EXISTS posts (
-    id Serial PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_name Varchar(30) NOT NULL,
-    title Varchar(100) NOT NULL,
-    content Varchar(300) NOT NULL
+    user_name VARCHAR(30) NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    content VARCHAR(300) NOT NULL
 ); 
 
 CREATE TABLE IF NOT EXISTS comment (
+    comment_id SERIAL NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    user_name Varchar(30) NOT NULL,
-    title Varchar(100) NOT NULL,
-    content Varchar(300) NOT NULL,
+    user_name VARCHAR(30) NOT NULL,
+    title VARCHAR(100) NOT NULL,
+    content VARCHAR(300) NOT NULL,
     post_id INT NOT NULL,
-    FOREIGN KEY (post_id) REFERENCES posts(post_id)
+    FOREIGN KEY (post_id) REFERENCES posts(id)
 );

@@ -1,58 +1,30 @@
 {% extends 'layout.html' %}
 
 {% block body %} 
-<body>
-    <header>
-        <nav class="navbar">
-            <a id="hitlist-brand" href="/">HitList</a>
-            <div class="navlinks">
-                <ul class="navbar-list">
-                    <li class="nav-item">
-                        <a class="home" href="{{ url_for('index_page') }}">Home</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="signin_page" href="{{ url_for('signin_page') }}">Sign-In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="sign-up" href="{{ url_for('signup_page') }}">Sign-Up</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="discussion_page" href="{{ url_for('discussion_page') }}">Discussion</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="contact_page" href="{{ url_for('contact_page') }}">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="account_settings_page" href="{{ url_for('account_settings_page') }}">Settings/Support</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
     <!-- User page will be different for each user, change this when we have DB and more functionality -->
     <main class="profile-page">
         <div class="grid-container-profile">
             <div class="profile-container">
-                <img src="../static/images/default_profile_picture.jpg" alt="profile picture">
-                <div class="user-info-container">
-                    <p> {{ display_name }} </p>
-                    <p>User ID: {{ user_id }}</p>
+                <h1>{{ username }}</h1>
+                <img src="../static/images/profile.png" alt="Empty Profile">
+                <div class="profile-links-container">
+                    <h3>User ID: {{ user_id }}</h3>
                     {% if is_user %}
-
-                    <p><a href="{{ url_for('get_user_playlists')}}">Upload Playlists</a></p>
-    
-                    <!-- I think the account settings page might need to be unique to each user -->
-                    <p><a href="{{ url_for('account_settings_page') }}">Settings</a></p>
+                        <a href="{{ url_for('get_user_playlists')}}">Playlists</a>
                     {% endif %}
-                    {% if user_has_playlists %}
-                    <p><a href="{{ url_for('get_playlists_by_user', username=username) }}">Playlists</a></p>
-                    {% endif %}
+                    <a class="selected" href="{{ url_for('profile_page', username = username)}}">Profile</a>
+                    <a href="{{ url_for('account_settings_page') }}">Settings</a>
+                    <a href="{{ url_for('account_contact_page') }}">Contact</a>
                 </div>
             </div>
             <div class="user-post-container">
                 {% if user_posts | length <= 0 %}
                     {% if is_user %}
-                    <h1>You have no posts! Create one by going to our <a href="{{ url_for('discussion_page')}}">discussion</a> page and clicking the + button!</h1>
+                    <div class='user-post-message'>
+                        <h1>You have no posts! Create one by going to our </h1>
+                        <a href="{{ url_for('discussion_page')}}"><h1>Discussion forum</h1></a> 
+                        <h1>and clicking the + button!</h1>
+                    </div>
                     {% else %}
                     <h1>This user has no posts</h1>
                     {% endif %}
@@ -64,6 +36,9 @@
                         <h4>{{post.user_name}}</h4>
                         <p>{{post.title}} {{post.created}}</p>
                         <p>{{post.content}}</p>
+                        <form action="{{ url_for('delete_post', post_id=post.id) }}" method="post">
+                            <button type="submit">Delete</button>
+                        </form>
                     </article>
                 </div>
                 {% endfor %}
@@ -71,5 +46,4 @@
             </div>
         </div>
     </main>
-</body>
 {% endblock %}
