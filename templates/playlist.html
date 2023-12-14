@@ -1,101 +1,90 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<head>
-    <script src="../static/js/playlist.js" defer></script>
-</head>
-<body>
-    <header>
-        <nav class="navbar">
-            <a id="hitlist-brand" href="/">HitList</a>
-            <div class="navlinks">
-                <ul class="navbar-list">
-                    <li class="nav-item">
-                        <a class="home" href="{{ url_for('index_page') }}">Home</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="signin_page" href="{{ url_for('signin_page') }}">Sign-In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="sign-up" href="{{ url_for('signup_page') }}">Sign-Up</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="discussion_page" href="{{ url_for('discussion_page') }}">Discussion</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="contact_page" href="{{ url_for('contact_page') }}">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="account_settings_page" href="{{ url_for('account_settings_page') }}">Settings/Support</a>
-                    </li>
-                </ul>
+    <head>
+        <script src="../static/js/playlist.js" defer></script>
+    </head>
+    <body>
+        <main class="playlist-main">
+            <div class="playlist-profile-main">
+                <div class="profile-container">
+                    <h1>{{ username }}</h1>
+                    <img id="playlist-prof-img" src="../static/images/profile.png" alt="Empty Profile">
+                    <div class="profile-links-container">
+                        <a class="selected" href="{{ url_for('get_user_playlists')}}">Playlists</a>
+                        <a href="{{ url_for('profile_page', username = username)}}">Profile</a>
+                        <a href="{{ url_for('account_settings_page') }}">Settings</a>
+                        <a href="{{ url_for('account_contact_page') }}">Contact</a>
+                    </div>
+                </div>
+                <div>
+                    <div class="playlist-attributes">
+                        {% if logged_in %}
+                        <div class="user-playlists">
+                            <h2>Your Playlists:</h2>
+                            <form action="/playlist/<playlist_id>" method="POST" class="playlist-form">
+                                <ul>
+                                    {% for name, key in names %}   
+                                    <li>
+                                        <input class="form-check-input" type="radio" name="playlist" id="playlist-1" value="{{ key }}">
+                                        <label class="form-check-label" for="playlist-1">{{ name }}</label>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </form>
+                        </div>
+                        {% endif %}
+                        <div class="playlist-info">
+                            <h2>Playlist Details:</h2>
+                            <ul>
+                                <li>
+                                    <p>Number of songs: {{ playlist_data[1] | length }}</p>
+                                </li>
+                                <li>
+                                    <p>Owner: {{ owner }}</p>
+                                </li>
+                                <li>
+                                    <p>Number of Artists: {{ unique_artists | length }} </p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </nav>
-    </header>
-    <main class="playlist-main">
-        {% if user_playlist_data %}
-            {% for key, value in user_playlist_data.items() %}
-                <li>
-                    <input class="form-check-input" type="radio" name="playlist" id="playlist-1" value="{{ key }}">
-                    <label class="form-check-label" for="playlist-1">{{ value[0] }}</label>
-                </li>
-            {% endfor %}
-        {% else %}
-        <div class="playlist-container">
-            <div class="playlist-table">
-                <h2>{{ playlist_data[0] }}</h2>
-                <table class="table">
-                <tr>
-                    <td>#</td>
-                    <td>Song</td>
-                    <td>Album</td>
-                    <td>Artist</td>
-                    <td>Duration</td>
-                </tr>
-                {% for data in playlist_data[1] %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{{  playlist_data[1][loop.index-1] }}</td>
-                    <td>{{ playlist_data[2][loop.index-1] }}</td>
-                    <td>{{ playlist_data[3][loop.index-1] }}</td>
-                    <td>{{ playlist_data[4][loop.index-1] }}</td>
-                </tr>
-                {% endfor %}
-                </table>
-            </div>
-            <div class="playlist">
-                {% if logged_in %}
-                <div class="user-playlists">
-                    <h2>Your Playlists:</h2>
-                    <form action="/playlist/<playlist_id>" method="POST" class="playlist-form">
-                        <ul>
-                            {% for name, key in names %}   
-                            <li>
-                                <input class="form-check-input" type="radio" name="playlist" id="playlist-1" value="{{ key }}">
-                                <label class="form-check-label" for="playlist-1">{{ name }}</label>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </form>
+            <div class="playlist-container">
+                {% if user_playlist_data %}
+                    {% for key, value in user_playlist_data.items() %}
+                        <li>
+                            <input class="form-check-input" type="radio" name="playlist" id="playlist" value="{{ key }}">
+                            <label class="form-check-label" for="playlist">{{ value[0] }}</label>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                <div class="playlist-info-container">
+                    <div class="playlist-table">
+                        <h2>{{ playlist_data[0] }}</h2>
+                        <table class="table">
+                        <tr class="tr-1">
+                            <td>#</td>
+                            <td>Song</td>
+                            <td>Album</td>
+                            <td>Artist</td>
+                            <td>Duration</td>
+                        </tr>
+                        {% for data in playlist_data[1] %}
+                        <tr class="tr-2">
+                            <td>{{ loop.index }}</td>
+                            <td>{{  playlist_data[1][loop.index-1] }}</td>
+                            <td>{{ playlist_data[2][loop.index-1] }}</td>
+                            <td>{{ playlist_data[3][loop.index-1] }}</td>
+                            <td>{{ playlist_data[4][loop.index-1] }}</td>
+                        </tr>
+                        {% endfor %}
+                        </table>
+                    </div>
                 </div>
                 {% endif %}
-                <div class="playlist-info">
-                    <h2>Playlist Details</h2>
-                    <ul>
-                        <li>
-                            <p>Number of songs: {{ playlist_data[1] | length }}</p>
-                        </li>
-                        <li>
-                            <p>Owner: {{ owner }}</p>
-                        </li>
-                        <li>
-                            <p>Number of Artists: {{ unique_artists | length }} </p>
-                        </li>
-                    </ul>
-                </div>
             </div>
-        </div>
-        {% endif %}
-    </main>
-</body>
+        </main>
+    </body>
 {% endblock %}

@@ -46,33 +46,31 @@ ul, li {
 
 #hitlist-brand {
     color: var(--clr-neutral-A);
-    margin-left: 20px;
+    margin: 10px;
 }
 
-.navbar-list {
+.navList {
     display: flex;
     flex-direction: row;
     justify-content: center;
     height: 60px;
-    gap: 20px;
+    gap: 25px;
     margin: 0 20px 0 0;
     align-items: center;
 }
 
-.navbar-list a {
+.navLink {
     color: var(--clr-gray);
 }
 
-.navbar-list .active a {
+.navLink:hover, .navLink:active {
     color: var(--clr-neutral-A);
-}
+} 
 
-.hidden {
-    display: none;
-}
+
 
 /**** Footer ****/
-footer {
+/* footer {
     background-color: var(--clr-red);
     color: var(--clr-neutral-A);
     height: 60px;
@@ -83,7 +81,7 @@ footer {
     width: 100%;
     position: absolute;
     bottom: 0;
-}
+} */
 
 
 /**** Index Main ****/
@@ -197,10 +195,11 @@ footer {
 /**** Discussion Main ****/
 .discussion-main {
     background-color: var(--clr-neutral-A);
-    height: 90vh;
+    height: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: start;
     gap: 100px;
     color: var(--clr-red);
     position: relative;
@@ -330,20 +329,43 @@ footer {
     color: var(--clr-neutral-A);
     background-color: var(--clr-red);
     border-radius: 50px;
-    width: 100px;
+    width: 150px;
     height: 40px;
     text-align: center;
     padding-top: 5px;
     margin: 0 15px;
+    margin-left: 500px;
 }
 
-.discussion-form-group {
-    width: 75vw;
+.discussion-form-group div {
+    font-size: 25px;
 }
 
-.hidden {
-    display: none;
+.discussion-form-group form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
+
+.discussion-card-container .discussion-form-group input, .discussion-card-container .discussion-form-group textarea {
+    width: 800px;
+    font-size: 20px;
+    color: var(--clr-red);
+    border: 2px solid var(--clr-orange);
+    border-radius: 10px;
+}
+
+.discussion-card-container .discussion-form-group button {
+    width: 200px;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.discussion-posts {
+    margin-top: 100px;
+}
+
 
 /**** Contact Main ****/
 .contact_page {
@@ -418,16 +440,39 @@ button[type="submit"] {
     align-items: center;    
     justify-content: center;
     gap: 10rem; 
+    margin: 200px 100px;
+    color: var(--clr-red);
 }
 
-.profile-container, .user-info-container {
-    padding: 1rem;
-    text-align: left;
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
 }
 
-.profile-container > img {
-    width: 20vw;
-    height: 45vh;
+.profile-container img {
+    width: 400px;
+    height: 400px;
+    margin-bottom: 5px;
+    border: 5px solid var(--clr-red);
+    border-radius: 10px;
+}
+
+.profile-links-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile-links-container .selected {
+    color: var(--clr-orange);
+}
+
+.profile-links-container h3, .profile-links-container a {
+    font-size: 30px;
+    color: var(--clr-red);
 }
 
 .user-post {
@@ -439,10 +484,71 @@ button[type="submit"] {
     width: 40vw;
 }
 
+.user-post-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+}
+
 
 /**** Playlist Main ****/
+.playlist-main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;    
+    justify-content: center;
+    gap: 5rem; 
+    padding: 100px 100px;
+    color: var(--clr-red);
+}
+
+.playlist-profile-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5rem;
+}
+
+#playlist-prof-img {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 5px;
+    border: 5px solid var(--clr-red);
+    border-radius: 10px;
+}
+
+.playlist-attributes {
+    color: var(--clr-red);
+    font-size: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-playlists form {
+    margin-left: 1em;
+}
+
+.playlist-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.playlist-info ul {
+    margin-right: 1em;
+}
 
 .playlist-container {
+    margin-bottom: 400px;
+}
+
+.playlist-info-container {
     display: flex;
     flex-direction: row;
     padding: 1rem;
@@ -453,8 +559,18 @@ button[type="submit"] {
     height: 40vh;
 }
 
+.tr-1 {
+    font-size: 25px;
+    color: var(--clr-orange);
+}
 
-/**** Account Settings Main ****/
+.tr-2 {
+    font-size: 20px;
+    color: var(--clr-red);
+}
+
+
+/**** Acount Settings Main ****/
 .prof-settings-main {
     background-color: var(--clr-neutral-A);
     height: 90vh;
@@ -500,10 +616,18 @@ button[type="submit"] {
     
 }
 
+.profile-modifications {
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    align-content: center;
+}
+
 .prof-settings-form-group {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .hidden {
@@ -511,25 +635,27 @@ button[type="submit"] {
 }
 
 .prof-settings-form-group label {
-    width: 200px;
-    font-size: 30px;
+    width: 250px;
+    font-size: 25px;
     padding-bottom: 15px;
     color: var(--clr-red);
+    align-self: center;
 }
 
 .prof-settings-form-group input {
-    width: 500px;
+    width: 250px;
     height: 50px;
     border-radius: 10px;
     border: 2px solid var(--clr-orange);
     font-size: 30px;
+    align-self: center;
 }
 
 .prof-settings-main button {
     width: 250px;
     border-radius: 10px;
-    margin-left: 325px;
     font-size: 20px;
+    align-self: center;
 }
 
 button[type="button"] {
@@ -541,8 +667,6 @@ button[type="button"] {
     font-size: 18px;
     cursor: pointer;
 }
-
-
 
 
 /**** Account Contact Main ****/

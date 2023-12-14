@@ -4,43 +4,13 @@
     <head>
         <script src="../static/js/discussion.js" defer></script>
     </head>
-    <header>
-        <nav class="navbar">
-            <a id="hitlist-brand" href="/">HitList</a>
-            <div class="navlinks">
-                <ul class="navbar-list">
-                    <li class="nav-item">
-                        <a class="index_page" href="{{ url_for('index_page') }}">Home</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="signin_page" href="{{ url_for('signin_page') }}">Sign-In</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="sign-up" href="{{ url_for('signup_page') }}">Sign-Up</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="discussion_page" href="{{ url_for('discussion_page') }}">Discussion</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="contact_page" href="{{ url_for('contact_page') }}">Contact</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="account_settings_page" href="{{ url_for('account_settings_page') }}">Settings/Support</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
-
     <main class="discussion-main">
         {% if username %}
         <div class="discussion-main-profile">
             <div class="discussion-links-container">
-                <a href="/profile/{{ username }}">{{ display_name }}</a>
+                <a href="/profile/{{ username }}">{{ username }}</a>
                 <img src="../static/images/profile.png" alt="Empty Profile">
                 <a href="/profile/{{ username }}">Profile</a>
-                <a href="{{ url_for('discussion_page') }}" class="selected">Newest</a>
-                <a href="{{ url_for('discussion_page') }}">Oldest</a>
             </div>
             <button class="discussion-post-btn"><span class="material-symbols-outlined">add</span></button>
         </div>
@@ -50,44 +20,49 @@
                 <div class="discussion-card-container-profile">
                     <div>
                         <img src="../static/images/profile.png" alt="Profile Name">
-                        <h2>{{ display_name }}</h2>
+                        <h2>{{ username }}</h2>
                     </div>
                     <h2>{{ date }}</h2>
                 </div>
                 <div class="discussion-form-group">
                     <form action="/discussion_page" method="post">
-                        <label for="content">Title</label>
-                        <input type="text" class="form-control" id="title" name="title">
-                        <label for="content">Content</label>
-                        <textarea class="form-control" id="content" name="content" rows="3"></textarea>
+                        <div>
+                            <label for="content">Title</label>
+                            <input type="text" class="form-control" id="title" name="title">
+                        </div>
+                        <div>
+                            <label for="content">Content</label>
+                            <textarea class="form-control" id="content" name="content" rows="3"></textarea>
+                        </div>
                         <button type="submit">Submit</button>
                     </form>
                 </div>
             </div>
-            {% if not post_list %}
-            <h1>No posts available, create one by clicking the + button!</h1>
-            {% else %}
-            {% for post in post_list %}
-            <div class="discussion-card-container">
-                <div class="discussion-card-container-profile">
-                    <div>
-                        <img src="../static/images/profile.png" alt="Profile Name">
-                        <a href="{{ url_for('profile_page', username = post.user_name )}}"><h2>{{ post.user_name }}</h2></a>
-                    </div>
-                    <h2>{{ post.created }}</h2>
-                </div>
-                <p>{{ post.content }}</p>
-                <div class="discussion-card-container-btns">
-                    <button>Comment</button>
-                    <div>
-                        <button><span class="material-symbols-outlined">thumb_up</span></button>
-                        <button><span class="material-symbols-outlined">thumb_down</span></button>
-                        <button><span class="material-symbols-outlined">share</span></button>
-                    </div>
-                </div>
+            <div class="discussion-posts">
+                {% if not post_list %}
+                    {% if not session['username'] %}
+                        <h1 id="no-posts">Oh no! No posts have been made at the moment.</h1>
+                    {% else %}
+                        <h1 id="no-posts">No posts available, create one by clicking the + button!</h1>
+                    {% endif %}
+                {% else %}
+                    {% for post in post_list %}
+                        <div class="discussion-card-container">
+                            <div class="discussion-card-container-profile">
+                                <div>
+                                    <img src="../static/images/profile.png" alt="Profile Name">
+                                    <a href="{{ url_for('profile_page', username=post.user_name) }}"><h2>{{ post.user_name }}</h2></a>
+                                </div>
+                                <h2>{{ post.created }}</h2>
+                            </div>
+                            <p>{{ post.content }}</p>
+                            <div class="discussion-card-container-btns">
+                                <button>Comment</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
-            {% endfor %}
-            {% endif %}
         </div>
     </main>
 {% endblock %}
