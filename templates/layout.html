@@ -38,7 +38,7 @@
                         <a class="navLink" href="{{ url_for('discussion_page') }}">Discussion</a>
                     </li>
                     <li class="navItem">
-                        <a class="navLink" href="{{ url_for('profile_page', username=username) }}">Profile</a>
+                        <a class="navLink" href="{{ url_for('profile_page', username=session['username']) }}">Profile</a>
                     </li>
                     {% endif %}
                 </ul>

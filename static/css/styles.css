@@ -287,6 +287,10 @@ ul, li {
     border-radius: 30px;
 }
 
+.discussion-card-container #title {
+    padding: 20px 0 20px 25px;
+}
+
 .discussion-card-container-profile {
     width: 100%;
     display: flex;
@@ -321,20 +325,18 @@ ul, li {
     align-items: center;
 }
 
-.discussion-card-container-btns div {
-    display: flex;
-}
-
-.discussion-card-container-btns button {
-    color: var(--clr-neutral-A);
+.discussion-card-container button {
     background-color: var(--clr-red);
     border-radius: 50px;
     width: 150px;
     height: 40px;
     text-align: center;
-    padding-top: 5px;
     margin: 0 15px;
     margin-left: 500px;
+}
+
+.discussion-card-container button a {
+    color: var(--clr-neutral-A);
 }
 
 .discussion-form-group div {
@@ -349,17 +351,22 @@ ul, li {
 }
 
 .discussion-card-container .discussion-form-group input, .discussion-card-container .discussion-form-group textarea {
-    width: 800px;
+    width: 650px;
     font-size: 20px;
     color: var(--clr-red);
     border: 2px solid var(--clr-orange);
     border-radius: 10px;
+    justify-content: center;
+    align-items: center;
 }
 
 .discussion-card-container .discussion-form-group button {
-    width: 200px;
-    border-radius: 10px;
-    font-size: 20px;
+    background-color: var(--clr-red);
+    border-radius: 50px;
+    width: 150px;
+    height: 40px;
+    text-align: center;
+    margin: 0 15px;
 }
 
 .discussion-posts {
@@ -440,7 +447,7 @@ button[type="submit"] {
     align-items: center;    
     justify-content: center;
     gap: 10rem; 
-    margin: 200px 100px;
+    margin: 100px 100px;
     color: var(--clr-red);
 }
 
@@ -449,6 +456,9 @@ button[type="submit"] {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    position: absolute;
+    left: 20vw;
+    top: 15vh;
 }
 
 .profile-container img {
@@ -476,12 +486,13 @@ button[type="submit"] {
 }
 
 .user-post {
-    border: 2px solid black;
-    padding: 1rem;
-    margin: 1rem;
-    border-radius: 4px;
+    border: 5px solid var(--clr-red);
+    padding: 25px;
+    border-radius: 10px;
     box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
     width: 40vw;
+    color: var(--clr-red);
+    font-size: 25px;
 }
 
 .user-post-message {
@@ -490,6 +501,50 @@ button[type="submit"] {
     align-items: center;
     justify-content: center;
     gap: 25px;
+}
+
+.user-card-container {
+    width: 650px;
+    height: auto;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 20px;
+    border: 2px solid var(--clr-red);
+    margin: 50px 0 0 100px;
+    padding: 30px;
+    border-radius: 30px;
+}
+
+.user-card-container-profile {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-card-container form button {
+    background-color: var(--clr-red);
+    border-radius: 50px;
+    width: 150px;
+    height: 40px;
+    text-align: center;
+    margin: 0 15px;
+}
+
+.user-post-container {
+    padding-bottom: 225px;
+    position: absolute;
+    top: 15vh;
+    right: 20vw;
+}
+
+.user-card-container form {
+    width: 100%;
+    display: flex;
+    margin-left: 400px;
 }
 
 
@@ -764,4 +819,65 @@ button[type="button"] {
     text-align: center;
     padding-top: 500px;
     font-size: 50px;
+}
+
+/* Post Page */
+
+.post-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.posting-card-container {
+    width: 650px;
+    height: auto;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 20px;
+    border: 2px solid var(--clr-red);
+    margin: 50px 0 0 100px;
+    padding: 30px;
+    border-radius: 30px;
+}
+
+.posting-card-container-profile img {
+    width: 75px;
+    height: 75px;
+    border-radius: 50px;
+    border: 2px solid var(--clr-orange);
+}
+
+.posting-card-container-profile {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.posting-card-container form button {
+    background-color: var(--clr-red);
+    border-radius: 50px;
+    width: 150px;
+    height: 40px;
+    text-align: center;
+    margin-left: 10px;
+}
+
+.posting-post-container {
+    padding-bottom: 225px;
+    position: absolute;
+    top: 15vh;
+    right: 20vw;
+}
+
+.posting-card-container form {
+    width: 100%;
+    display: flex;
+    justify-content: end;
 }

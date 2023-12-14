@@ -76,6 +76,9 @@
                 </div>
             </form>
             <form method="post" action="{{ url_for('account_settings_page')}}">
+                <button type="submit" name="submit-btn" class="settings-btn" value="connect-spotify">Connect to Spotify</button>
+            </form>
+            <form method="post" action="{{ url_for('account_settings_page')}}">
                 <button type="submit" name="submit-btn" class="settings-btn" value="logout">Log out</button>
             </form>
             <form method="post" action="{{ url_for('account_settings_page')}}">

@@ -25,7 +25,7 @@
                     <h2>{{ date }}</h2>
                 </div>
                 <div class="discussion-form-group">
-                    <form action="/discussion_page" method="post">
+                    <form action="{{ url_for('discussion_page') }}" method="post">
                         <div>
                             <label for="content">Title</label>
                             <input type="text" class="form-control" id="title" name="title">
@@ -47,19 +47,18 @@
                     {% endif %}
                 {% else %}
                     {% for post in post_list %}
-                        <a href="{{ url_for('get_post_by_id', id = post.id)}}"></a>
                         <div class="discussion-card-container">
                             <div class="discussion-card-container-profile">
                                 <div>
+                                    <p class="hidden" id="post_id"><small>{{ post.id }}</small></p>
                                     <img src="../static/images/profile.png" alt="Profile Name">
                                     <a href="{{ url_for('profile_page', username=post.user_name) }}"><h2>{{ post.user_name }}</h2></a>
                                 </div>
-                                <h2>{{ post.created }}</h2>
+                                <h2>{{ post.created.strftime("%d %B %Y") }}</h2>
                             </div>
+                            <h2 id="title">{{ post.title }}</h2>
                             <p>{{ post.content }}</p>
-                            <div class="discussion-card-container-btns">
-                                <button class="comment-btn {{loop.index0}}">Comment</button>
-                            </div>
+                            <button class="settings-btn"><a href="{{ url_for('get_post_by_id', id = post.id)}}">Comments</a></button>
                         </div>
                     {% endfor %}
                 {% endif %}

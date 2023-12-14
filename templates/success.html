@@ -2,6 +2,16 @@
 
 {% block body %}
 <main>
-    <h1 id="success-h1">Successfully connected to spotify!</h1>
+    {% if username and session['playlists'] %}
+        <h1 id="success-h1">Successfully connected to Spotify!</h1>
+    {% else %}
+        <form action="{{ url_for('authorize_spotify') }}" method="get" class="signup-form">
+            <div class="mb-3">
+                <label class="form-check-label" for="auth">Would you like to authorize your Spotify account with us?</label>
+                <input class="form-check-input" type="checkbox" id="auth" value="checked" name="auth">
+            </div>
+            <button type="submit" class="btn btn-primary">Authorize</button>
+        </form>
+    {% endif %}
 </main>
 {% endblock %}
