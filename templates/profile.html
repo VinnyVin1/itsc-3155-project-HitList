@@ -10,11 +10,11 @@
                 <div class="profile-links-container">
                     <h3>User ID: {{ user_id }}</h3>
                     {% if is_user %}
-                        <a href="{{ url_for('get_user_playlists')}}">Playlists</a>
-                    {% endif %}
+                    <a href="{{ url_for('get_user_playlists')}}">Playlists</a>
                     <a class="selected" href="{{ url_for('profile_page', username = username)}}">Profile</a>
                     <a href="{{ url_for('account_settings_page') }}">Settings</a>
                     <a href="{{ url_for('account_contact_page') }}">Contact</a>
+                    {% endif %}
                 </div>
             </div>
             <div class="user-post-container">
@@ -36,9 +36,11 @@
                         <h4>{{post.user_name}}</h4>
                         <p>{{post.title}} {{post.created}}</p>
                         <p>{{post.content}}</p>
+                        {% if is_user %}
                         <form action="{{ url_for('delete_post', post_id=post.id) }}" method="post">
                             <button type="submit">Delete</button>
                         </form>
+                        {% endif %}
                     </article>
                 </div>
                 {% endfor %}

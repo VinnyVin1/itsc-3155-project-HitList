@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <main class="edit-comment-main">
+        <div>
+            <h1>{{ comment.user_name }}</h1>
+            <h3>{{ comment.created }}</h3>
+            <h3>{{ comment.content }}</h3>
+        </div>
+        <div>
+            <form action="{{ url_for('new_comment', id = comment.comment_id) }}" method="post">
+                <label for="content">New comment:</label>
+                <textarea name="content" id="" cols="30" rows="10"></textarea>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </main>
+{% endblock %}

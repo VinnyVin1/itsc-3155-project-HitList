@@ -47,19 +47,17 @@
                     {% endif %}
                 {% else %}
                     {% for post in post_list %}
-                        <a href="{{ url_for('get_post_by_id', id = post.id)}}"></a>
                         <div class="discussion-card-container">
                             <div class="discussion-card-container-profile">
                                 <div>
+                                    <p class="hidden" id="post_id"><small>{{ post.id }}</small></p>
                                     <img src="../static/images/profile.png" alt="Profile Name">
                                     <a href="{{ url_for('profile_page', username=post.user_name) }}"><h2>{{ post.user_name }}</h2></a>
                                 </div>
                                 <h2>{{ post.created }}</h2>
                             </div>
+                            <button class="settings-btn"><a href="{{ url_for('get_post_by_id', id = post.id)}}">Go to post</a></button>
                             <p>{{ post.content }}</p>
-                            <div class="discussion-card-container-btns">
-                                <button class="comment-btn {{loop.index0}}">Comment</button>
-                            </div>
                         </div>
                     {% endfor %}
                 {% endif %}
