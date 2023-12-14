@@ -279,10 +279,13 @@ def success_page():
     session['access_token'] = data['access_token']
     session['refresh_token'] = data['refresh_token']
 
-    return render_template('success.html')
+    return render_template('success.html', username=session.get('username'))
 
-@app.get('/authorize_url')
-def authorize_spotify_url():
+@app.route('/authorize_spotify')
+def authorize_spotify():
+    if 'email' not in session:
+        return redirect(url_for('signin_page'))
+
     return redirect(spotify_auth.get_authorize_url())
 
 # Functions for functionality
@@ -319,7 +322,7 @@ def sign_up():
     if spotify_allowed:
         return redirect(spotify_auth.get_authorize_url())
     else:
-        return redirect('/')
+        return redirect(url_for('profile_page', username=username))
 
 @app.post('/signin_page')
 def sign_in():

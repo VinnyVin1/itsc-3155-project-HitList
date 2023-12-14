@@ -13,6 +13,7 @@
             <a href="{{ url_for('profile_page', username = username)}}">Profile</a>
             <a href="{{ url_for('account_settings_page') }}" class="selected">Settings</a>
             <a href="{{ url_for('account_contact_page') }}">Contact</a>
+            <a href="{{ url_for('authorize_spotify') }}">Authorize Spotify</a>
         </div>
         <div class="profile-data">
             <h2>First Name: {{ first_name }}</h2>

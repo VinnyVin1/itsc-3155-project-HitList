@@ -757,4 +757,11 @@ button[type="button"] {
 }
 
 
-
+/* Success Page */
+#success-h1 {
+    color: var(--clr-red);
+    text-decoration: underline var(--clr-orange);
+    text-align: center;
+    padding-top: 500px;
+    font-size: 50px;
+}
