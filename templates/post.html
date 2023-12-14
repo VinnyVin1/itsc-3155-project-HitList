@@ -1,46 +1,25 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<header>
-    <nav class="navbar">
-        <a id="hitlist-brand" href="/">HitList</a>
-        <div class="navlinks">
-            <ul class="navbar-list">
-                <li class="nav-item">
-                    <a class="index_page" href="{{ url_for('index_page') }}">Home</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="signin_page" href="{{ url_for('signin_page') }}">Sign-In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="sign-up" href="{{ url_for('signup_page') }}">Sign-Up</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="discussion_page" href="{{ url_for('discussion_page') }}">Discussion</a>
-                </li>
-                <li class="nav-item">
-                    <a class="contact_page" href="{{ url_for('contact_page') }}">Contact</a>
-                </li>
-                <li class="nav-item">
-                    <a class="account_settings_page" href="{{ url_for('account_settings_page') }}">Settings/Support</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
 <main class="post-main">
     <article>
         <h1>{{ post.user_name }}</h1>
         <p>{{ post.title }}</p>
         <p>{{ post.created }}</p>
         <p>{{ post.content }}</p>
+        {% if user %}
+        <form action="{{ url_for('create_comment', id = post.id)}}" method="post">
+            <button type="submit" name="submit-btn" value="edit-post-btn">Edit</button>
+            <button type="submit" name="submit-btn" value="delete-post-btn">Delete</button>
+        </form>
+        {% endif %}
     </article>
     {% if user %}
     <div>
         <form action="{{url_for('create_comment', id = post.id)}}" method="post">
         <label for="content">Comment</label>
         <input type="text" name="content">
-        <button type="submit">Submit</button>
+        <button type="submit" name="submit-btn" value="comment">Submit</button>
         </form>
     </div>
     {% endif %}
@@ -50,6 +29,13 @@
             <p>{{ comment.user_name }}</p>
             <p>{{ comment.created }}</p>
             <p>{{ comment.content }}</p>
+            {% if user %}
+            <form action="{{url_for('create_comment', id = post.id)}}" method="post">
+                <input type="hidden" name="comment_id" value="{{comment.comment_id}}">
+                <button type="submit" name="submit-btn" value="delete">Delete</button>
+                <button type="submit" name="submit-btn" value="edit" class="edit-btn">Edit</button>
+            </form>
+            {% endif %}
         </div>
         {% endfor %}
     {% endif %}

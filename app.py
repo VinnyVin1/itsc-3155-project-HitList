@@ -63,17 +63,18 @@ def discussion_page():
 
 @app.post('/discussion_page')
 def createdPost():
-    if request.form['submit'] == 'post':
-        new_post =  Posts(title = request.form.get('title'), created = datetime.datetime.now(), user_name = session['username'], content = request.form.get('content'))
-        post_list = Posts.query.all()
-        db.session.add(new_post)
-        db.session.commit()
-        date = datetime.datetime.now()
-    return render_template('discussion.html', display_name = session['display_name'], username = session['username'], date = date.strftime(f'{"%d"} {"%B"} {"%Y"} {"%X"}'), post_list = post_list)
+    new_post =  Posts(title = request.form.get('title'), created = datetime.datetime.now(), user_name = session['username'], content = request.form.get('content'))
+    db.session.add(new_post)
+    db.session.commit()
+    date = datetime.datetime.now()
+    post_list = Posts.query.all()
+    return redirect(url_for('discussion_page', display_name = session['display_name'], username = session['username'], date = date.strftime(f'{"%d"} {"%B"} {"%Y"} {"%X"}'), post_list = post_list))
 
 @app.get('/post/<id>')
 def get_post_by_id(id):
     post = Posts.query.filter_by(id = id).first()
+    if post == None:
+        abort(404, 'Post not found with specified ID')
     user = 'email' in session
     post_comments = Comment.query.filter_by(post_id = id).all()
     if not post_comments:
@@ -82,14 +83,65 @@ def get_post_by_id(id):
 
 @app.post('/post/<id>')
 def create_comment(id):
-    content = request.form.get('content')
-    created = datetime.datetime.now()
-    user_name = session['username']
-    commet = Comment(created = created, user_name = user_name, content = content, id = id)
-    db.session.add(commet)
-    db.session.commit()
-    return redirect(url_for('get_post_by_id', id = id))
+    if request.form['submit-btn'] == 'comment':
+        content = request.form.get('content')
+        created = datetime.datetime.now()
+        user_name = session['username']
+        commet = Comment(created = created, user_name = user_name, content = content, id = id)
+        db.session.add(commet)
+        db.session.commit()
+        return redirect(url_for('get_post_by_id', id = id))
+    elif request.form['submit-btn'] == 'delete':
+        comment = Comment.query.filter_by(comment_id = request.form['comment_id']).first()
+        db.session.delete(comment)
+        db.session.commit()
+        return redirect(url_for('get_post_by_id', id = id))
+    elif request.form['submit-btn'] == 'edit':
+        return redirect(url_for('edit_comment', id = request.form['comment_id']))
+    elif request.form['submit-btn'] == 'delete-post-btn':
+        post = Posts.query.filter_by(id = id).first()
+        post_comments = Comment.query.filter_by(post_id = id).first()
+        db.session.delete(post_comments)
+        db.session.commit()
+        db.session.delete(post)
+        db.session.commit()
+        return redirect(url_for('discussion_page'))
+    elif request.form['submit-btn'] == 'edit-post-btn':
+        return redirect(url_for('get_edit_post', id = id ))
 
+@app.get('/post/edit/<id>')
+def get_edit_post(id):
+    post = Posts.query.filter_by(id = id).first()
+    if not session['username'] or session['username'] != post.user_name:
+        abort(403, 'This is not your post!')
+    return render_template('post_edit.html', post = post)
+
+@app.post('/post/edit/<id>')
+def edit_post(id):
+    post = Posts.query.filter_by(id = id).first()
+    new_title = request.form.get('title')
+    new_content = request.form.get('content')
+    post.title = new_title
+    post.content = new_content
+    db.session.add(post)
+    db.session.commit()
+    return redirect(url_for('get_post_by_id', id = post.id))
+
+@app.get('/comment/edit/<id>')
+def edit_comment(id):
+    comment = Comment.query.filter_by(comment_id = id).first()
+    if not session['username'] or session['username'] != comment.user_name:
+        abort(403, 'This isnt your comment!')
+    return render_template('comment_edit.html', comment = comment)
+
+@app.post('/comment/edit/<id>')
+def new_comment(id):
+    comment = Comment.query.filter_by(comment_id = id).first()
+    content = request.form.get('content')
+    comment.content = content 
+    db.session.add(comment)
+    db.session.commit()
+    return redirect(url_for('get_post_by_id', id = comment.post_id))
 
 @app.route('/contact_page')
 def contact_page():
@@ -106,7 +158,6 @@ def profile_page(username):
             break
 
     user_posts = Posts.query.filter_by(user_name = user.username).all()
-    print(f'user posts are {user_posts}')
     if not session or session['username'] != user.username:
         return render_template('profile.html', display_name = user.display_name, user_id = user.user_id, username = username, is_user = False, user_posts = user_posts, user_has_playlists = user_has_playlists)
     return render_template('profile.html', display_name = user.display_name, user_id = user.user_id, username = username, is_user = True, user_posts = user_posts, user_has_playlists = user_has_playlists)
@@ -115,10 +166,8 @@ def profile_page(username):
 def get_user_playlists():
     if 'access_token' not in session and 'refresh_token' not in session:
         abort(403, 'Not authorized with Spotify, please connect to continue')
-    print(f'session is {session}')
     usernames = []
     playlist_id = ''
-    print(list(cache.keys()))
     for index, key in enumerate(list(cache.keys())):
         usernames.append(key.split(', ')[0])
         if key.split(', ')[0] == session['username']:
@@ -174,10 +223,8 @@ def playlist(playlist_id):
     else:
 
         for key in list(cache.keys()):
-            print(f'key is {key}')
             if key.split(', ')[1] == playlist_id:
                 username = key.split(', ')[0]
-        print(f'username is {username}')
         playlist_data = cache[f'{username}, {playlist_id}']
         user_playlist = spotify.playlist(playlist_id = playlist_data[-1])
         owner = user_playlist['owner']['display_name']
@@ -260,7 +307,6 @@ def success_page():
         return redirect('signin_page')
     
     user = User.query.filter_by(email = email).first()
-
     header = base64.b64encode(f"{getenv('SPOTIPY_CLIENT_ID')}:{getenv('SPOTIPY_CLIENT_SECRET')}".encode("utf-8")).decode("utf-8")
 
     request_access_code = {
@@ -280,10 +326,6 @@ def success_page():
     session['refresh_token'] = data['refresh_token']
 
     return render_template('success.html')
-
-@app.get('/authorize_url')
-def authorize_spotify_url():
-    return redirect(spotify_auth.get_authorize_url())
 
 # Functions for functionality
 
@@ -382,6 +424,7 @@ def change_account_settings():
         db.session.commit()
     elif request.form['submit-btn'] == 'change_email':
         user.email = request.form.get('email')
+        session['email'] = request.form.get('email')
         db.session.add(user)
         db.session.commit()
     elif request.form['submit-btn'] == 'change_password':
@@ -397,6 +440,8 @@ def change_account_settings():
     elif request.form['submit-btn'] == 'logout':
         session.clear()
         return redirect('/')
+    elif request.form['submit-btn'] == 'connect-spotify':
+        return redirect(spotify_auth.get_authorize_url())
 
     return redirect('account_settings_page')
 
