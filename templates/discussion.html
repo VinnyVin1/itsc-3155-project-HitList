@@ -60,7 +60,7 @@
                         <input type="text" class="form-control" id="title" name="title">
                         <label for="content">Content</label>
                         <textarea class="form-control" id="content" name="content" rows="3"></textarea>
-                        <button type="submit">Submit</button>
+                        <button type="submit" name="submit" value="post">Submit</button>
                     </form>
                 </div>
             </div>
@@ -68,24 +68,26 @@
             <h1>No posts available, create one by clicking the + button!</h1>
             {% else %}
             {% for post in post_list %}
-            <div class="discussion-card-container">
-                <div class="discussion-card-container-profile">
-                    <div>
-                        <img src="../static/images/profile.png" alt="Profile Name">
-                        <a href="{{ url_for('profile_page', username = post.user_name )}}"><h2>{{ post.user_name }}</h2></a>
+            <a href="{{ url_for('get_post_by_id', id = post.id)}}">
+                <div class="discussion-card-container">
+                    <div class="discussion-card-container-profile">
+                        <div>
+                            <img src="../static/images/profile.png" alt="Profile Name">
+                            <a href="{{ url_for('profile_page', username = post.user_name )}}"><h2>{{ post.user_name }}</h2></a>
+                        </div>
+                        <h2>{{ post.created }}</h2>
                     </div>
-                    <h2>{{ post.created }}</h2>
-                </div>
-                <p>{{ post.content }}</p>
-                <div class="discussion-card-container-btns">
-                    <button>Comment</button>
-                    <div>
-                        <button><span class="material-symbols-outlined">thumb_up</span></button>
-                        <button><span class="material-symbols-outlined">thumb_down</span></button>
-                        <button><span class="material-symbols-outlined">share</span></button>
+                    <p>{{ post.content }}</p>
+                    <div class="discussion-card-container-btns">
+                        <button class="comment-btn {{loop.index0}}">Comment</button>
+                        <div>
+                            <button><span class="material-symbols-outlined">thumb_up</span></button>
+                            <button><span class="material-symbols-outlined">thumb_down</span></button>
+                            <button><span class="material-symbols-outlined">share</span></button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
             {% endfor %}
             {% endif %}
         </div>

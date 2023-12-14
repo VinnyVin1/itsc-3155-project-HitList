@@ -32,6 +32,7 @@ class Posts(db.Model):
     user_name = db.Column(db.String(100), nullable=False)
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.String(1000), nullable=False)
+    comments = db.relationship('Comment', backref = 'Post', lazy = True)
 
     def __init__(self, user_name, created, title, content):
         self.created = created
@@ -41,3 +42,19 @@ class Posts(db.Model):
 
     def __repr__(self):
         return f'<Post {self.id, self.created, self.user_name, self.title, self.content}>'
+
+class Comment(db.Model):
+
+    __tablename__ = 'comment'
+
+    comment_id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    created = db.Column(db.DateTime)
+    user_name = db.Column(db.String(100), nullable = False)
+    content = db.Column(db.String(100), nullable = False)
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable = False)
+
+    def __init__(self, created, user_name, content, id):
+        self.created = created
+        self.user_name = user_name
+        self.content = content
+        self.post_id = id
