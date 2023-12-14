@@ -9,7 +9,12 @@
             <div class="playlist-profile-main">
                 <div class="profile-container">
                     <h1>{{ username }}</h1>
-                    <img id="playlist-prof-img" src="../static/images/profile.png" alt="Empty Profile">
+                    {% if user_profile_image != None%}
+                    <img src="data:image/*;base64,{{ user_profile_image }}" alt="Avatar">
+                    {% else %}
+                    <img src="../static/images/default_profile_picture.jpg" alt="Default profile image">
+                    {% endif %}
+                    <a href="/profile/{{ username }}">Profile</a>
                     <div class="profile-links-container">
                         <a class="selected" href="{{ url_for('get_user_playlists')}}">Playlists</a>
                         <a href="{{ url_for('profile_page', username = username)}}">Profile</a>
