@@ -81,7 +81,7 @@ footer {
     justify-content: center;
     align-items: center;
     width: 100%;
-    position: absolute;
+    position: sticky;
     bottom: 0;
 }
 
@@ -167,11 +167,9 @@ footer {
 
 /**** Sign-Up Main ****/
 .signup-main {
-    height: 90vh;
     width: 100%;
     background-color: var(--clr-neutral-A);
     display: flex;
-    align-items: center;
     justify-content: center;
 }
 
