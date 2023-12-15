@@ -29,7 +29,7 @@
                     <h2>{{ date }}</h2>
                 </div>
                 <div class="discussion-form-group">
-                    <form action="/discussion_page" method="post">
+                    <form action="{{ url_for('discussion_page') }}" method="post">
                         <div>
                             <label for="content">Title</label>
                             <input type="text" class="form-control" id="title" name="title">
@@ -62,11 +62,11 @@
                                     {% endif %}
                                     <a href="{{ url_for('profile_page', username=post_data[1].user_name) }}"><h2>{{ post_data[1].user_name }}</h2></a>
                                 </div>
-                                <h2>{{ post_data[1].created }}</h2>
+                                <h2>{{ post_data[1].created.strftime("%d %B %Y") }}</h2>
                             </div>
-                            <p>{{ post_data[1].title }}</p>
+                            <h2 id="title">{{ post_data[1].title }}</h2>
                             <p>{{ post_data[1].content }}</p>
-                            <button class="settings-btn"><a href="{{ url_for('get_post_by_id', id = post_data[1].id)}}">Go to post</a></button>
+                            <button class="settings-btn"><a href="{{ url_for('get_post_by_id', id = post_data[1].id)}}">Comments</a></button>
                         </div>
                     {% endfor %}
                 {% endif %}

@@ -20,6 +20,7 @@ load_dotenv()
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{getenv("db_user")}:{getenv("db_password")}@{getenv("db_host")}:{getenv("db_port")}/{getenv("db_name")}'
 app.secret_key = getenv('FLASK_SECRET_KEY')
+print("You are running in " + app.secret_key)
 db.init_app(app)
 bcrypt = Bcrypt(app)
 
@@ -53,37 +54,44 @@ def signup_page():
         return redirect(url_for('discussion_page'))
     return render_template('signup.html')
 
-@app.get('/discussion_page')
+@app.route('/discussion_page')
 def discussion_page():
     date = datetime.datetime.now()
     user = None
-    if session:
-        user = User.query.filter_by(username = session['username']).first()
+
+    if 'username' in session:
+        user = User.query.filter_by(username=session['username']).first()
+
     post_list = Posts.query.all()
     post_list_with_images = []
-    post_user = ''
+
     for post in post_list:
-        post_user = User.query.filter_by(username = post.user_name).first()
-        if post_user.profile_image != None:
-            post_list_with_images.append([base64.b64encode(post_user.profile_image).decode("utf-8"), post ])
+        post_user = User.query.filter_by(username=post.user_name).first()
+        if post_user and post_user.profile_image:
+            post_list_with_images.append([base64.b64encode(post_user.profile_image).decode("utf-8"), post])
         else:
             post_list_with_images.append([None, post])
+
     user_profile_image = None
-    if user != None:
-        if user.profile_image != None:
-            user_profile_image = base64.b64encode(user.profile_image).decode('utf-8')
-    if not session:
-        return render_template('discussion.html', post_list = post_list_with_images)
-    return render_template('discussion.html', display_name = session['display_name'], username = session['username'], date = date.strftime(f'{"%d"} {"%B"} {"%Y"} {"%X"}'), post_list = post_list_with_images, user_profile_image = user_profile_image)
+    if user and user.profile_image:
+        user_profile_image = base64.b64encode(user.profile_image).decode('utf-8')
+
+    return render_template('discussion.html', 
+                           display_name=session.get('display_name'), 
+                           username=session.get('username'), 
+                           date=date.strftime("%d %B %Y"), 
+                           post_list=post_list_with_images, 
+                           user_profile_image=user_profile_image)
 
 @app.post('/discussion_page')
 def createdPost():
-    new_post =  Posts(title = request.form.get('title'), created = datetime.datetime.now(), user_name = session['username'], content = request.form.get('content'))
-    db.session.add(new_post)
-    db.session.commit()
-    date = datetime.datetime.now()
-    post_list = Posts.query.all()
-    return redirect(url_for('discussion_page', display_name = session['display_name'], username = session['username'], date = date.strftime(f'{"%d"} {"%B"} {"%Y"} {"%X"}'), post_list = post_list))
+    if request.method == 'POST':
+        new_post =  Posts(title = request.form.get('title'), created = datetime.datetime.now(), user_name = session['username'], content = request.form.get('content'))
+        db.session.add(new_post)
+        db.session.commit()
+        date = datetime.datetime.now()
+        post_list = Posts.query.all()
+    return redirect(url_for('discussion_page', display_name = session['display_name'], username = session['username'], date = date.strftime("%d %B %Y"), post_list = post_list))
 
 @app.get('/post/<id>')
 def get_post_by_id(id):
@@ -225,6 +233,13 @@ def get_user_playlists():
             session['playlists'] = True
             return redirect(url_for('get_playlists_by_user', username = session['username']))
 
+@app.route('/authorize_spotify')
+def authorize_spotify():
+    if 'email' not in session:
+        return redirect(url_for('signin_page'))
+    
+    return redirect(spotify_auth.get_authorize_url())
+
 @app.get('/playlist/<playlist_id>')
 def playlist(playlist_id):
     logged_in = False
@@ -360,9 +375,7 @@ def success_page():
     session['access_token'] = data['access_token']
     session['refresh_token'] = data['refresh_token']
 
-    return render_template('success.html')
-
-# Functions for functionality
+    return render_template('success.html', username=session.get('username'))
 
 @app.post('/sign_up_page')
 def sign_up():
@@ -396,7 +409,7 @@ def sign_up():
     if spotify_allowed:
         return redirect(spotify_auth.get_authorize_url())
     else:
-        return redirect('/')
+        return redirect(url_for('profile_page', username=username))
 
 @app.post('/signin_page')
 def sign_in():
@@ -561,6 +574,7 @@ def delete_post(post_id):
     if post_to_delete.user_name != session['username']:
         abort(403, "You are not authorized to delete this post.")
     
+    comment = Comment.query.filter_by(post_id = post_id).delete()
     db.session.delete(post_to_delete)
     db.session.commit()
 
