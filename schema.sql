@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS "User" (
     last_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     display_name VARCHAR(255) NOT NULL,
+    profile_image bytea, 
     spotify_refresh_token VARCHAR(512)
 );
 
