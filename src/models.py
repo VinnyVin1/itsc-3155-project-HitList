@@ -14,14 +14,16 @@ class User(db.Model):
     last_name = db.Column(db.String(255), nullable = False)
     email = db.Column(db.String(255), nullable = False, unique = True)
     spotify_refresh_token = db.Column(db.String(512), nullable = True)
+    profile_image = db.Column(db.LargeBinary, nullable = True)
 
-    def __init__(self, display_name: str, username: str, password: str, first_name: str, last_name: str, email: str) -> None:
+    def __init__(self, display_name: str, username: str, password: str, first_name: str, last_name: str, email: str, profile_image: bytes) -> None:
         self.display_name = display_name
         self.username = username
         self.password = password 
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
+        self.profile_image = profile_image
 
 class Posts(db.Model):
 

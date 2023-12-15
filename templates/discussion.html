@@ -9,7 +9,11 @@
         <div class="discussion-main-profile">
             <div class="discussion-links-container">
                 <a href="/profile/{{ username }}">{{ username }}</a>
-                <img src="../static/images/profile.png" alt="Empty Profile">
+                {% if user_profile_image != None%}
+                <img src="data:image/*;base64,{{ user_profile_image }}" alt="Avatar">
+                {% else %}
+                <img src="../static/images/default_profile_picture.jpg" alt="Default profile image">
+                {% endif %}
                 <a href="/profile/{{ username }}">Profile</a>
             </div>
             <button class="discussion-post-btn"><span class="material-symbols-outlined">add</span></button>
@@ -46,19 +50,23 @@
                         <h1 id="no-posts">No posts available, create one by clicking the + button!</h1>
                     {% endif %}
                 {% else %}
-                    {% for post in post_list %}
+                    {% for post_data in post_list %}
                         <div class="discussion-card-container">
                             <div class="discussion-card-container-profile">
                                 <div>
-                                    <p class="hidden" id="post_id"><small>{{ post.id }}</small></p>
-                                    <img src="../static/images/profile.png" alt="Profile Name">
-                                    <a href="{{ url_for('profile_page', username=post.user_name) }}"><h2>{{ post.user_name }}</h2></a>
+                                    <p class="hidden" id="post_id"><small>{{ post_data[1].id }}</small></p>
+                                    {% if post_data[0] != None %}
+                                    <img src="data:image/*;base64,{{ post_data[0] }}" alt="Avatar">
+                                    {% else %}
+                                    <img src="../static/images/default_profile_picture.jpg" alt="Default">
+                                    {% endif %}
+                                    <a href="{{ url_for('profile_page', username=post_data[1].user_name) }}"><h2>{{ post_data[1].user_name }}</h2></a>
                                 </div>
-                                <h2>{{ post.created.strftime("%d %B %Y") }}</h2>
+                                <h2>{{ post_data[1].created.strftime("%d %B %Y") }}</h2>
                             </div>
-                            <h2 id="title">{{ post.title }}</h2>
-                            <p>{{ post.content }}</p>
-                            <button class="settings-btn"><a href="{{ url_for('get_post_by_id', id = post.id)}}">Comments</a></button>
+                            <h2 id="title">{{ post_data[1].title }}</h2>
+                            <p>{{ post_data[1].content }}</p>
+                            <button class="settings-btn"><a href="{{ url_for('get_post_by_id', id = post_data[1].id)}}">Comments</a></button>
                         </div>
                     {% endfor %}
                 {% endif %}

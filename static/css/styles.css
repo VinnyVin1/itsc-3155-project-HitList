@@ -280,9 +280,9 @@ ul, li {
     display: flex;
     flex-direction: column;
     align-items: start;
-    gap: 20px;
+    gap: 10px;
     border: 2px solid var(--clr-red);
-    margin: 100px 0 0 100px;
+    margin: 25px 0 0 100px;
     padding: 30px;
     border-radius: 30px;
 }
@@ -564,7 +564,43 @@ button[type="submit"] {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 5rem;
+    gap: 100px;
+    top: 0;
+    left: ;
+}
+
+.play-profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    position: absolute;
+    left: 14vw;
+    top: 15vh;
+}
+
+.play-profile-container img {
+    width: 400px;
+    height: 400px;
+    margin-bottom: 5px;
+    border: 5px solid var(--clr-red);
+    border-radius: 10px;
+}
+
+.play-profile-links-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.play-profile-links-container .selected {
+    color: var(--clr-orange);
+}
+
+.play-profile-links-container h3, .play-profile-links-container a {
+    font-size: 30px;
+    color: var(--clr-red);
 }
 
 #playlist-prof-img {
@@ -582,6 +618,9 @@ button[type="submit"] {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    top: 65vh;
+    left: 13vw;
 }
 
 .user-playlists form {
@@ -601,6 +640,9 @@ button[type="submit"] {
 
 .playlist-container {
     margin-bottom: 400px;
+    position: absolute;
+    top: 15vh;
+    right: 8vw;
 }
 
 .playlist-info-container {
